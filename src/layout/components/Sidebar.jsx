@@ -12,6 +12,8 @@ import {
   ShoppingCartOutlined,
   ShoppingOutlined,
   PieChartOutlined,
+  MenuOutlined,
+  GroupOutlined,
 } from "@ant-design/icons";
 
 import useAppStore from "../../store/AppStore";
@@ -52,29 +54,39 @@ function Sidebar() {
       label: <Link to="/reports">Reports</Link>,
     },
     {
+      key: "/users",
+      icon: <UserOutlined />,
+      label: <Link to="/users">Users</Link>,
+    },
+    {
+      key: "/productGroups",
+      icon: <GroupOutlined />,
+      label: <Link to="/productGroups">Product Groups</Link>,
+      group: "Others",
+    },
+    {
       key: "/suppliers",
       icon: <InboxOutlined />,
       label: <Link to="/suppliers">Suppliers</Link>,
+      group: "Others",
     },
     {
       key: "/companies",
       icon: <TeamOutlined />,
       label: <Link to="/companies">Companies</Link>,
+      group: "Others",
     },
     {
       key: "/locations",
       icon: <PushpinOutlined />,
       label: <Link to="/locations">Locations</Link>,
+      group: "Others",
     },
     {
       key: "/warehouses",
       icon: <BankOutlined />,
       label: <Link to="/warehouses">Warehouses</Link>,
-    },
-    {
-      key: "/users",
-      icon: <UserOutlined />,
-      label: <Link to="/users">Users</Link>,
+      group: "Others",
     },
   ];
 
@@ -100,7 +112,22 @@ function Sidebar() {
   ];
 
   if (userType === "Admin") {
-    menuItems = [...menuItems, ...adminMenuItems];
+    const otherMenuChildren = adminMenuItems.filter(
+      (item) => item.group === "Others"
+    );
+    const newAdminMenuItems = adminMenuItems.filter(
+      (item) => item.group !== "Others"
+    );
+    menuItems = [
+      ...menuItems,
+      ...newAdminMenuItems,
+      {
+        key: "/Others",
+        icon: <MenuOutlined />,
+        label: "Others",
+        children: otherMenuChildren,
+      },
+    ];
   } else if (userType === "Customer") {
     menuItems = [...menuItems, ...customerMenuItems];
   }

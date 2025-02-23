@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { Form, Input, Button, Divider } from "antd";
 
-const FormSupplier = ({ formData, onSubmit }) => {
-  const [formSupplierInstance] = Form.useForm();
+const FormLocation = ({ formData, onSubmit }) => {
+  const [formLocationInstance] = Form.useForm();
 
   useEffect(() => {
     if (formData) {
-      formSupplierInstance.setFieldsValue(formData);
+      formLocationInstance.setFieldsValue(formData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
@@ -30,32 +30,13 @@ const FormSupplier = ({ formData, onSubmit }) => {
   return (
     <Form
       {...layout}
-      form={formSupplierInstance}
+      form={formLocationInstance}
       validateMessages={{
         required: "This is required.",
       }}
       onFinish={handleFormFinish}
     >
       <Form.Item label="Name" name="name" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item
-        label="Email"
-        name="email"
-        rules={[
-          {
-            pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/i,
-            message: "Invalid email format.",
-          },
-          { required: true },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item label="Phone" name="phone" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item label="Address" name="address" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
       <Divider />
@@ -70,4 +51,4 @@ const FormSupplier = ({ formData, onSubmit }) => {
   );
 };
 
-export default FormSupplier;
+export default FormLocation;

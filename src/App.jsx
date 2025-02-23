@@ -10,13 +10,22 @@ import Layout from "./layout/Index.jsx";
 import PageTitleProvider from "./components/common/PageTitleProvider";
 
 import Dashboard from "./pages/private/Dashboard/Index";
+import Products from "./pages/private/Products/Index";
 import Suppliers from "./pages/private/Suppliers/Index.jsx";
 import Companies from "./pages/private/Companies/Index.jsx";
-import Products from "./pages/private/Products/Index";
+import Locations from "./pages/private/Locations/Index.jsx";
+import Warehouses from "./pages/private/Warehouses/Index.jsx";
+
 import Ecommerce from "./pages/private/Ecommerce/Index";
 
 function App() {
   const adminRoutes = [
+    {
+      title: "Products",
+      subTitle: "product management",
+      path: "/products",
+      element: <Products />,
+    },
     {
       title: "Suppliers",
       subTitle: "supplier management",
@@ -30,18 +39,24 @@ function App() {
       element: <Companies />,
     },
     {
-      title: "Products",
-      subTitle: "product management",
-      path: "/products",
-      element: <Products />,
+      title: "Locations",
+      subTitle: "product/item location management",
+      path: "/locations",
+      element: <Locations />,
+    },
+    {
+      title: "Warehouses",
+      subTitle: "warehouse management",
+      path: "/warehouses",
+      element: <Warehouses />,
     },
   ];
 
   const customerRoutes = [
     {
-      title: "Customer Order Page",
+      title: "Ecommerce",
       subTitle: "place your order here",
-      path: "/customer/orderPage",
+      path: "/ecommerce",
       element: <Ecommerce />,
     },
   ];

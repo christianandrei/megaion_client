@@ -3,32 +3,32 @@ import { Spin, Row, Col, Button, Drawer, Table, Modal, Dropdown } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 
 import ErrorContent from "../../../components/common/ErrorContent";
-import FormSupplier from "./components/FormSupplier";
+import FormLocation from "./components/FormLocation";
 
 import http from "../../../services/httpService";
 
-function Suppliers() {
-  const [suppliers, setSuppliers] = useState([]);
-  const [selectedSupplier, setSelectedSupplier] = useState(null);
+function Locations() {
+  const [locations, setLocations] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
-  const [isFormCreateSupplierOpen, setIsFormCreateSupplierOpen] =
+  const [isFormCreateLocationOpen, setIsFormCreateLocationOpen] =
     useState(false);
-  const [isFormUpdateSupplierOpen, setIsFormUpdateSupplierOpen] =
+  const [isFormUpdateLocationOpen, setIsFormUpdateLocationOpen] =
     useState(false);
 
   const [isContentLoading, setIsContentLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const getSuppliers = async () => {
-    const { data } = await http.get("/api/suppliers");
-    setSuppliers(data);
+  const getLocations = async () => {
+    const { data } = await http.get("/api/locations");
+    setLocations(data);
   };
 
   useEffect(() => {
-    const fetchSuppliers = async () => {
+    const fetchLocations = async () => {
       try {
         setIsContentLoading(true);
-        await getSuppliers();
+        await getLocations();
       } catch (error) {
         setError(error);
       } finally {
@@ -36,27 +36,27 @@ function Suppliers() {
       }
     };
 
-    fetchSuppliers();
+    fetchLocations();
   }, []);
 
   if (error) {
     return <ErrorContent />;
   }
 
-  const toggleFormCreateSupplierOpen = () => {
-    setIsFormCreateSupplierOpen(!isFormCreateSupplierOpen);
+  const toggleFormCreateLocationOpen = () => {
+    setIsFormCreateLocationOpen(!isFormCreateLocationOpen);
   };
 
-  const toggleFormUpdateSupplierOpen = () => {
-    setIsFormUpdateSupplierOpen(!isFormUpdateSupplierOpen);
+  const toggleFormUpdateLocationOpen = () => {
+    setIsFormUpdateLocationOpen(!isFormUpdateLocationOpen);
   };
 
-  const handleFormCreateSupplierSubmit = async (formData) => {
+  const handleFormCreateLocationSubmit = async (formData) => {
     try {
-      toggleFormCreateSupplierOpen();
+      toggleFormCreateLocationOpen();
       setIsContentLoading(true);
-      await http.post("/api/suppliers", { ...formData, status: "Active" });
-      await getSuppliers();
+      await http.post("/api/locations", { ...formData, status: "Active" });
+      await getLocations();
     } catch (error) {
       setError(error);
     } finally {
@@ -64,12 +64,12 @@ function Suppliers() {
     }
   };
 
-  const handleFormUpdateSupplierSubmit = async (formData) => {
+  const handleFormUpdateLocationSubmit = async (formData) => {
     try {
-      toggleFormUpdateSupplierOpen();
+      toggleFormUpdateLocationOpen();
       setIsContentLoading(true);
-      await http.put(`/api/suppliers/${selectedSupplier.id}`, formData);
-      await getSuppliers();
+      await http.put(`/api/locations/${selectedLocation.id}`, formData);
+      await getLocations();
     } catch (error) {
       setError(error);
     } finally {
@@ -77,11 +77,11 @@ function Suppliers() {
     }
   };
 
-  const handleDeleteSupplier = async (supplier) => {
+  const handleDeleteLocation = async (location) => {
     try {
       setIsContentLoading(true);
-      await http.delete(`/api/suppliers/${supplier.id}`);
-      await getSuppliers();
+      await http.delete(`/api/locations/${location.id}`);
+      await getLocations();
     } catch (error) {
       setError(error);
     } finally {
@@ -93,18 +93,6 @@ function Suppliers() {
     {
       title: "Name",
       dataIndex: "name",
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-    },
-    {
-      title: "Phone",
-      dataIndex: "phone",
-    },
-    {
-      title: "Address",
-      dataIndex: "address",
     },
     {
       title: "Action",
@@ -121,14 +109,14 @@ function Suppliers() {
         const handleMenuClick = ({ key }) => {
           console.log(key);
           if (key === "edit") {
-            setSelectedSupplier(record);
-            toggleFormUpdateSupplierOpen();
+            setSelectedLocation(record);
+            toggleFormUpdateLocationOpen();
           } else if (key === "delete") {
             Modal.confirm({
-              title: "Delete Supplier",
-              content: "Are you sure you want to delete this supplier?",
+              title: "Delete Location",
+              content: "Are you sure you want to delete this location?",
               onOk: async () => {
-                handleDeleteSupplier(record);
+                handleDeleteLocation(record);
               },
             });
           }
@@ -155,38 +143,38 @@ function Suppliers() {
         <Row type="flex" justify="space-between" style={{ marginBottom: 16 }}>
           <Col></Col>
           <Col>
-            <Button type="primary" onClick={toggleFormCreateSupplierOpen}>
-              Create Supplier
+            <Button type="primary" onClick={toggleFormCreateLocationOpen}>
+              Create Location
             </Button>
           </Col>
         </Row>
-        <Table columns={tableColumns} dataSource={suppliers} rowKey="id" />
+        <Table columns={tableColumns} dataSource={locations} rowKey="id" />
       </Spin>
 
       <Drawer
-        title="Create Supplier"
-        open={isFormCreateSupplierOpen}
+        title="Create Location"
+        open={isFormCreateLocationOpen}
         destroyOnClose
         width={500}
-        onClose={toggleFormCreateSupplierOpen}
+        onClose={toggleFormCreateLocationOpen}
       >
-        <FormSupplier onSubmit={handleFormCreateSupplierSubmit} />
+        <FormLocation onSubmit={handleFormCreateLocationSubmit} />
       </Drawer>
 
       <Drawer
-        title="Update Supplier"
-        open={isFormUpdateSupplierOpen}
+        title="Update Location"
+        open={isFormUpdateLocationOpen}
         destroyOnClose
         width={500}
-        onClose={toggleFormUpdateSupplierOpen}
+        onClose={toggleFormUpdateLocationOpen}
       >
-        <FormSupplier
-          formData={selectedSupplier}
-          onSubmit={handleFormUpdateSupplierSubmit}
+        <FormLocation
+          formData={selectedLocation}
+          onSubmit={handleFormUpdateLocationSubmit}
         />
       </Drawer>
     </>
   );
 }
 
-export default Suppliers;
+export default Locations;

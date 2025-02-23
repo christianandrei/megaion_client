@@ -1,16 +1,6 @@
 import { useEffect, useState } from "react";
-import {
-  Spin,
-  Row,
-  Col,
-  Button,
-  Drawer,
-  Table,
-  Space,
-  Tooltip,
-  Modal,
-} from "antd";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Spin, Row, Col, Button, Drawer, Table, Dropdown, Modal } from "antd";
+import { MoreOutlined } from "@ant-design/icons";
 
 import ErrorContent from "../../../components/common/ErrorContent";
 import FormCompany from "./components/FormCompany";
@@ -101,7 +91,14 @@ function Companies() {
     {
       title: "Name",
       dataIndex: "name",
-      render: (text, record) => <span>{record.name}</span>,
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+    },
+    {
+      title: "Phone Number",
+      dataIndex: "phone_number",
     },
     {
       title: "Shipping Address",
@@ -109,35 +106,43 @@ function Companies() {
     },
     {
       title: "Action",
-      width: 100,
-      render: (_, record) => (
-        <Space>
-          <Tooltip title="Edit">
-            <Button
-              icon={<EditOutlined />}
-              onClick={() => {
-                setSelectedCompany(record);
-                toggleFormUpdateCompanyOpen();
-              }}
-            />
-          </Tooltip>
-          <Tooltip title="Delete">
-            <Button
-              danger
-              icon={<DeleteOutlined />}
-              onClick={() =>
-                Modal.confirm({
-                  title: "Delete Company",
-                  content: "Are you sure you want to delete this company?",
-                  onOk: async () => {
-                    handleDeleteCompany(record);
-                  },
-                })
-              }
-            />
-          </Tooltip>
-        </Space>
-      ),
+      width: 50,
+      render: (_, record) => {
+        const menuItems = [
+          { key: "edit", label: "Edit" },
+          {
+            type: "divider",
+          },
+          { key: "delete", label: "Delete", danger: true },
+        ];
+
+        const handleMenuClick = ({ key }) => {
+          if (key === "edit") {
+            setSelectedCompany(record);
+            toggleFormUpdateCompanyOpen();
+          } else if (key === "delete") {
+            Modal.confirm({
+              title: "Delete Company",
+              content: "Are you sure you want to delete this company?",
+              onOk: async () => {
+                handleDeleteCompany(record);
+              },
+            });
+          }
+        };
+
+        return (
+          <Dropdown
+            menu={{ items: menuItems, onClick: handleMenuClick }}
+            trigger={["click"]}
+            placement="bottomRight"
+          >
+            <Button shape="circle" onClick={(e) => e.stopPropagation()}>
+              <MoreOutlined />
+            </Button>
+          </Dropdown>
+        );
+      },
     },
   ];
 

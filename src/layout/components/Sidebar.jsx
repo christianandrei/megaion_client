@@ -4,7 +4,14 @@ import {
   DashboardOutlined,
   UnorderedListOutlined,
   InboxOutlined,
-  UsergroupAddOutlined,
+  TeamOutlined,
+  UserOutlined,
+  BankOutlined,
+  FileDoneOutlined,
+  PushpinOutlined,
+  ShoppingCartOutlined,
+  ShoppingOutlined,
+  PieChartOutlined,
 } from "@ant-design/icons";
 
 import useAppStore from "../../store/AppStore";
@@ -20,27 +27,67 @@ function Sidebar() {
 
   const adminMenuItems = [
     {
+      key: "/products",
+      icon: <UnorderedListOutlined />,
+      label: <Link to="/products">Products</Link>,
+    },
+    {
+      key: "/inventory",
+      icon: <FileDoneOutlined />,
+      label: <Link to="/inventory">Inventory</Link>,
+    },
+    {
+      key: "/purchaseOrders",
+      icon: <ShoppingCartOutlined />,
+      label: <Link to="/purchaseOrders">Purchase Orders</Link>,
+    },
+    {
+      key: "/orders",
+      icon: <ShoppingOutlined />,
+      label: <Link to="/orders">Orders</Link>,
+    },
+    {
+      key: "/reports",
+      icon: <PieChartOutlined />,
+      label: <Link to="/reports">Reports</Link>,
+    },
+    {
       key: "/suppliers",
       icon: <InboxOutlined />,
       label: <Link to="/suppliers">Suppliers</Link>,
     },
     {
       key: "/companies",
-      icon: <UsergroupAddOutlined />,
+      icon: <TeamOutlined />,
       label: <Link to="/companies">Companies</Link>,
     },
     {
-      key: "/products",
-      icon: <UnorderedListOutlined />,
-      label: <Link to="/products">Products</Link>,
+      key: "/locations",
+      icon: <PushpinOutlined />,
+      label: <Link to="/locations">Locations</Link>,
+    },
+    {
+      key: "/warehouses",
+      icon: <BankOutlined />,
+      label: <Link to="/warehouses">Warehouses</Link>,
+    },
+    {
+      key: "/users",
+      icon: <UserOutlined />,
+      label: <Link to="/users">Users</Link>,
     },
   ];
 
   const customerMenuItems = [
     {
-      key: "/customer/orderPage",
+      key: "/ecommerce",
       icon: <UnorderedListOutlined />,
-      label: <Link to="/customer/orderPage">Order Page</Link>,
+      label: <Link to="/ecommerce">Ecommerce</Link>,
+    },
+    {
+      key: "/orders",
+      icon: <ShoppingOutlined />,
+      label: <Link to="/orders">Orders</Link>,
     },
   ];
 

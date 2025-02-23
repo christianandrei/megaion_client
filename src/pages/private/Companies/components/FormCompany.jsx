@@ -6,12 +6,7 @@ const FormCompany = ({ formData, onSubmit }) => {
 
   useEffect(() => {
     if (formData) {
-      const { name, email, shipping_address } = formData;
-      formCompanyInstance.setFieldsValue({
-        name,
-        email,
-        shipping_address,
-      });
+      formCompanyInstance.setFieldsValue(formData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
@@ -24,8 +19,7 @@ const FormCompany = ({ formData, onSubmit }) => {
       }
     }
 
-    console.log({ ...values, status: "Active" });
-    //onSubmit(values);
+    onSubmit(values);
   };
 
   const layout = {

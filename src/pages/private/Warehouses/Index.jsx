@@ -3,32 +3,32 @@ import { Spin, Row, Col, Button, Drawer, Table, Modal, Dropdown } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 
 import ErrorContent from "../../../components/common/ErrorContent";
-import FormSupplier from "./components/FormSupplier";
+import FormWarehouse from "./components/FormWarehouse";
 
 import http from "../../../services/httpService";
 
-function Suppliers() {
-  const [suppliers, setSuppliers] = useState([]);
-  const [selectedSupplier, setSelectedSupplier] = useState(null);
+function Warehouses() {
+  const [warehouses, setWarehouses] = useState([]);
+  const [selectedWarehouse, setSelectedWarehouse] = useState(null);
 
-  const [isFormCreateSupplierOpen, setIsFormCreateSupplierOpen] =
+  const [isFormCreateWarehouseOpen, setIsFormCreateWarehouseOpen] =
     useState(false);
-  const [isFormUpdateSupplierOpen, setIsFormUpdateSupplierOpen] =
+  const [isFormUpdateWarehouseOpen, setIsFormUpdateWarehouseOpen] =
     useState(false);
 
   const [isContentLoading, setIsContentLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const getSuppliers = async () => {
-    const { data } = await http.get("/api/suppliers");
-    setSuppliers(data);
+  const getWarehouses = async () => {
+    const { data } = await http.get("/api/warehouses");
+    setWarehouses(data);
   };
 
   useEffect(() => {
-    const fetchSuppliers = async () => {
+    const fetchWarehouses = async () => {
       try {
         setIsContentLoading(true);
-        await getSuppliers();
+        await getWarehouses();
       } catch (error) {
         setError(error);
       } finally {
@@ -36,27 +36,27 @@ function Suppliers() {
       }
     };
 
-    fetchSuppliers();
+    fetchWarehouses();
   }, []);
 
   if (error) {
     return <ErrorContent />;
   }
 
-  const toggleFormCreateSupplierOpen = () => {
-    setIsFormCreateSupplierOpen(!isFormCreateSupplierOpen);
+  const toggleFormCreateWarehouseOpen = () => {
+    setIsFormCreateWarehouseOpen(!isFormCreateWarehouseOpen);
   };
 
-  const toggleFormUpdateSupplierOpen = () => {
-    setIsFormUpdateSupplierOpen(!isFormUpdateSupplierOpen);
+  const toggleFormUpdateWarehouseOpen = () => {
+    setIsFormUpdateWarehouseOpen(!isFormUpdateWarehouseOpen);
   };
 
-  const handleFormCreateSupplierSubmit = async (formData) => {
+  const handleFormCreateWarehouseSubmit = async (formData) => {
     try {
-      toggleFormCreateSupplierOpen();
+      toggleFormCreateWarehouseOpen();
       setIsContentLoading(true);
-      await http.post("/api/suppliers", { ...formData, status: "Active" });
-      await getSuppliers();
+      await http.post("/api/warehouses", { ...formData, status: "Active" });
+      await getWarehouses();
     } catch (error) {
       setError(error);
     } finally {
@@ -64,12 +64,12 @@ function Suppliers() {
     }
   };
 
-  const handleFormUpdateSupplierSubmit = async (formData) => {
+  const handleFormUpdateWarehouseSubmit = async (formData) => {
     try {
-      toggleFormUpdateSupplierOpen();
+      toggleFormUpdateWarehouseOpen();
       setIsContentLoading(true);
-      await http.put(`/api/suppliers/${selectedSupplier.id}`, formData);
-      await getSuppliers();
+      await http.put(`/api/warehouses/${selectedWarehouse.id}`, formData);
+      await getWarehouses();
     } catch (error) {
       setError(error);
     } finally {
@@ -77,11 +77,11 @@ function Suppliers() {
     }
   };
 
-  const handleDeleteSupplier = async (supplier) => {
+  const handleDeleteWarehouse = async (warehouse) => {
     try {
       setIsContentLoading(true);
-      await http.delete(`/api/suppliers/${supplier.id}`);
-      await getSuppliers();
+      await http.delete(`/api/warehouses/${warehouse.id}`);
+      await getWarehouses();
     } catch (error) {
       setError(error);
     } finally {
@@ -93,18 +93,6 @@ function Suppliers() {
     {
       title: "Name",
       dataIndex: "name",
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-    },
-    {
-      title: "Phone",
-      dataIndex: "phone",
-    },
-    {
-      title: "Address",
-      dataIndex: "address",
     },
     {
       title: "Action",
@@ -121,14 +109,14 @@ function Suppliers() {
         const handleMenuClick = ({ key }) => {
           console.log(key);
           if (key === "edit") {
-            setSelectedSupplier(record);
-            toggleFormUpdateSupplierOpen();
+            setSelectedWarehouse(record);
+            toggleFormUpdateWarehouseOpen();
           } else if (key === "delete") {
             Modal.confirm({
-              title: "Delete Supplier",
-              content: "Are you sure you want to delete this supplier?",
+              title: "Delete Warehouse",
+              content: "Are you sure you want to delete this warehouse?",
               onOk: async () => {
-                handleDeleteSupplier(record);
+                handleDeleteWarehouse(record);
               },
             });
           }
@@ -155,38 +143,38 @@ function Suppliers() {
         <Row type="flex" justify="space-between" style={{ marginBottom: 16 }}>
           <Col></Col>
           <Col>
-            <Button type="primary" onClick={toggleFormCreateSupplierOpen}>
-              Create Supplier
+            <Button type="primary" onClick={toggleFormCreateWarehouseOpen}>
+              Create Warehouse
             </Button>
           </Col>
         </Row>
-        <Table columns={tableColumns} dataSource={suppliers} rowKey="id" />
+        <Table columns={tableColumns} dataSource={warehouses} rowKey="id" />
       </Spin>
 
       <Drawer
-        title="Create Supplier"
-        open={isFormCreateSupplierOpen}
+        title="Create Warehouse"
+        open={isFormCreateWarehouseOpen}
         destroyOnClose
         width={500}
-        onClose={toggleFormCreateSupplierOpen}
+        onClose={toggleFormCreateWarehouseOpen}
       >
-        <FormSupplier onSubmit={handleFormCreateSupplierSubmit} />
+        <FormWarehouse onSubmit={handleFormCreateWarehouseSubmit} />
       </Drawer>
 
       <Drawer
-        title="Update Supplier"
-        open={isFormUpdateSupplierOpen}
+        title="Update Warehouse"
+        open={isFormUpdateWarehouseOpen}
         destroyOnClose
         width={500}
-        onClose={toggleFormUpdateSupplierOpen}
+        onClose={toggleFormUpdateWarehouseOpen}
       >
-        <FormSupplier
-          formData={selectedSupplier}
-          onSubmit={handleFormUpdateSupplierSubmit}
+        <FormWarehouse
+          formData={selectedWarehouse}
+          onSubmit={handleFormUpdateWarehouseSubmit}
         />
       </Drawer>
     </>
   );
 }
 
-export default Suppliers;
+export default Warehouses;

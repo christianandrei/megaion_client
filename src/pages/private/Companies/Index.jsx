@@ -7,6 +7,8 @@ import FormCompany from "./components/FormCompany";
 
 import http from "../../../services/httpService";
 
+import { getColumnSearchProps } from "../../../helpers/TableFilterProps";
+
 function Companies() {
   const [companies, setCompanies] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -91,6 +93,7 @@ function Companies() {
     {
       title: "Name",
       dataIndex: "name",
+      ...getColumnSearchProps("name"),
     },
     {
       title: "Email",

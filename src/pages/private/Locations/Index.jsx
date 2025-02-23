@@ -7,6 +7,8 @@ import FormLocation from "./components/FormLocation";
 
 import http from "../../../services/httpService";
 
+import { getColumnSearchProps } from "../../../helpers/TableFilterProps";
+
 function Locations() {
   const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
@@ -93,6 +95,7 @@ function Locations() {
     {
       title: "Name",
       dataIndex: "name",
+      ...getColumnSearchProps("name"),
     },
     {
       title: "Action",

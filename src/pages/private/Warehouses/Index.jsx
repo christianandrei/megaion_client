@@ -7,6 +7,8 @@ import FormWarehouse from "./components/FormWarehouse";
 
 import http from "../../../services/httpService";
 
+import { getColumnSearchProps } from "../../../helpers/TableFilterProps";
+
 function Warehouses() {
   const [warehouses, setWarehouses] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState(null);
@@ -93,6 +95,7 @@ function Warehouses() {
     {
       title: "Name",
       dataIndex: "name",
+      ...getColumnSearchProps("name"),
     },
     {
       title: "Action",

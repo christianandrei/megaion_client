@@ -7,6 +7,8 @@ import FormSupplier from "./components/FormSupplier";
 
 import http from "../../../services/httpService";
 
+import { getColumnSearchProps } from "../../../helpers/TableFilterProps";
+
 function Suppliers() {
   const [suppliers, setSuppliers] = useState([]);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
@@ -93,6 +95,7 @@ function Suppliers() {
     {
       title: "Name",
       dataIndex: "name",
+      ...getColumnSearchProps("name"),
     },
     {
       title: "Email",

@@ -1,0 +1,71 @@
+import React from "react";
+
+import { Typography, Row, Col, Space, Button, Input } from "antd";
+import { TagsOutlined, SearchOutlined } from "@ant-design/icons";
+
+let inputRef = React.createRef();
+
+const getColumnSearchProps = (dataIndex) => {
+  return {
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={(node) => {
+            inputRef = node;
+          }}
+          placeholder="Enter text here"
+          value={selectedKeys[0]}
+          style={{
+            width: 188,
+            marginBottom: 8,
+            display: "block",
+          }}
+          onPressEnter={() => confirm()}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => confirm()}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters()}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) => {
+      return record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase());
+    },
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        //setTimeout(() => this.searchInput.select(), 100);
+        setTimeout(() => inputRef.focus(), 100);
+      }
+    },
+  };
+};
+
+export { getColumnSearchProps };

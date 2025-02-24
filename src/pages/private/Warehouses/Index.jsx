@@ -98,23 +98,26 @@ function Warehouses() {
       ...getColumnSearchProps("name"),
     },
     {
+      title: "Address",
+      dataIndex: "address",
+    },
+    {
       title: "Action",
       width: 50,
       render: (_, record) => {
         const menuItems = [
-          { key: "edit", label: "Edit" },
+          { key: "Edit", label: "Edit" },
           {
             type: "divider",
           },
-          { key: "delete", label: "Delete", danger: true },
+          { key: "Delete", label: "Delete", danger: true },
         ];
 
         const handleMenuClick = ({ key }) => {
-          console.log(key);
-          if (key === "edit") {
+          if (key === "Edit") {
             setSelectedWarehouse(record);
             toggleFormUpdateWarehouseOpen();
-          } else if (key === "delete") {
+          } else if (key === "Delete") {
             Modal.confirm({
               title: "Delete Warehouse",
               content: "Are you sure you want to delete this warehouse?",

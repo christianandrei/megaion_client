@@ -114,19 +114,18 @@ function Suppliers() {
       width: 50,
       render: (_, record) => {
         const menuItems = [
-          { key: "edit", label: "Edit" },
+          { key: "Edit", label: "Edit" },
           {
             type: "divider",
           },
-          { key: "delete", label: "Delete", danger: true },
+          { key: "Delete", label: "Delete", danger: true },
         ];
 
         const handleMenuClick = ({ key }) => {
-          console.log(key);
-          if (key === "edit") {
+          if (key === "Edit") {
             setSelectedSupplier(record);
             toggleFormUpdateSupplierOpen();
-          } else if (key === "delete") {
+          } else if (key === "Delete") {
             Modal.confirm({
               title: "Delete Supplier",
               content: "Are you sure you want to delete this supplier?",

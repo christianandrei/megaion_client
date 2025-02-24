@@ -11,6 +11,10 @@ import PageTitleProvider from "./components/common/PageTitleProvider";
 
 import Dashboard from "./pages/private/Dashboard/Index";
 import Products from "./pages/private/Products/Index";
+
+import PurchaseOrders from "./pages/private/PurchaseOrders/Index.jsx";
+
+import ProductGroups from "./pages/private/ProductGroups/Index.jsx";
 import Suppliers from "./pages/private/Suppliers/Index.jsx";
 import Companies from "./pages/private/Companies/Index.jsx";
 import Locations from "./pages/private/Locations/Index.jsx";
@@ -21,10 +25,22 @@ import Ecommerce from "./pages/private/Ecommerce/Index";
 function App() {
   const adminRoutes = [
     {
+      title: "Purchase Orders",
+      subTitle: "purchase order management",
+      path: "/purchaseOrders",
+      element: <PurchaseOrders />,
+    },
+    {
       title: "Products",
       subTitle: "product management",
       path: "/products",
       element: <Products />,
+    },
+    {
+      title: "Product Groups",
+      subTitle: "use to categorize products",
+      path: "/productGroups",
+      element: <ProductGroups />,
     },
     {
       title: "Suppliers",

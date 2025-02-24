@@ -112,18 +112,18 @@ function Companies() {
       width: 50,
       render: (_, record) => {
         const menuItems = [
-          { key: "edit", label: "Edit" },
+          { key: "Edit", label: "Edit" },
           {
             type: "divider",
           },
-          { key: "delete", label: "Delete", danger: true },
+          { key: "Delete", label: "Delete", danger: true },
         ];
 
         const handleMenuClick = ({ key }) => {
-          if (key === "edit") {
+          if (key === "Edit") {
             setSelectedCompany(record);
             toggleFormUpdateCompanyOpen();
-          } else if (key === "delete") {
+          } else if (key === "Delete") {
             Modal.confirm({
               title: "Delete Company",
               content: "Are you sure you want to delete this company?",

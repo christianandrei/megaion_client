@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { Form, Input, Button, Divider } from "antd";
 
-const FormWarehouse = ({ formData, onSubmit }) => {
-  const [formWarehouseInstance] = Form.useForm();
+const FormProductGroup = ({ formData, onSubmit }) => {
+  const [formProductGroupInstance] = Form.useForm();
 
   useEffect(() => {
     if (formData) {
-      formWarehouseInstance.setFieldsValue(formData);
+      formProductGroupInstance.setFieldsValue(formData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
@@ -30,16 +30,13 @@ const FormWarehouse = ({ formData, onSubmit }) => {
   return (
     <Form
       {...layout}
-      form={formWarehouseInstance}
+      form={formProductGroupInstance}
       validateMessages={{
         required: "This is required.",
       }}
       onFinish={handleFormFinish}
     >
       <Form.Item label="Name" name="name" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item label="Address" name="address" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
       <Divider />
@@ -54,4 +51,4 @@ const FormWarehouse = ({ formData, onSubmit }) => {
   );
 };
 
-export default FormWarehouse;
+export default FormProductGroup;

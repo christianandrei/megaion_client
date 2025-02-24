@@ -3,34 +3,34 @@ import { Spin, Row, Col, Button, Drawer, Table, Modal, Dropdown } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 
 import ErrorContent from "../../../components/common/ErrorContent";
-import FormLocation from "./components/FormLocation";
+import FormProductGroup from "./components/FormProductGroup";
 
 import http from "../../../services/httpService";
 
 import { getColumnSearchProps } from "../../../helpers/TableFilterProps";
 
-function Locations() {
-  const [locations, setLocations] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState(null);
+function ProductGroups() {
+  const [productGroups, setProductGroups] = useState([]);
+  const [selectedProductGroup, setSelectedProductGroup] = useState(null);
 
-  const [isFormCreateLocationOpen, setIsFormCreateLocationOpen] =
+  const [isFormCreateProductGroupOpen, setIsFormCreateProductGroupOpen] =
     useState(false);
-  const [isFormUpdateLocationOpen, setIsFormUpdateLocationOpen] =
+  const [isFormUpdateProductGroupOpen, setIsFormUpdateProductGroupOpen] =
     useState(false);
 
   const [isContentLoading, setIsContentLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const getLocations = async () => {
-    const { data } = await http.get("/api/locations");
-    setLocations(data);
+  const getProductGroups = async () => {
+    const { data } = await http.get("/api/productGroups");
+    setProductGroups(data);
   };
 
   useEffect(() => {
-    const fetchLocations = async () => {
+    const fetchProductGroups = async () => {
       try {
         setIsContentLoading(true);
-        await getLocations();
+        await getProductGroups();
       } catch (error) {
         setError(error);
       } finally {
@@ -38,27 +38,27 @@ function Locations() {
       }
     };
 
-    fetchLocations();
+    fetchProductGroups();
   }, []);
 
   if (error) {
     return <ErrorContent />;
   }
 
-  const toggleFormCreateLocationOpen = () => {
-    setIsFormCreateLocationOpen(!isFormCreateLocationOpen);
+  const toggleFormCreateProductGroupOpen = () => {
+    setIsFormCreateProductGroupOpen(!isFormCreateProductGroupOpen);
   };
 
-  const toggleFormUpdateLocationOpen = () => {
-    setIsFormUpdateLocationOpen(!isFormUpdateLocationOpen);
+  const toggleFormUpdateProductGroupOpen = () => {
+    setIsFormUpdateProductGroupOpen(!isFormUpdateProductGroupOpen);
   };
 
-  const handleFormCreateLocationSubmit = async (formData) => {
+  const handleFormCreateProductGroupSubmit = async (formData) => {
     try {
-      toggleFormCreateLocationOpen();
+      toggleFormCreateProductGroupOpen();
       setIsContentLoading(true);
-      await http.post("/api/locations", { ...formData, status: "Active" });
-      await getLocations();
+      await http.post("/api/productGroups", { ...formData, status: "Active" });
+      await getProductGroups();
     } catch (error) {
       setError(error);
     } finally {
@@ -66,12 +66,12 @@ function Locations() {
     }
   };
 
-  const handleFormUpdateLocationSubmit = async (formData) => {
+  const handleFormUpdateProductGroupSubmit = async (formData) => {
     try {
-      toggleFormUpdateLocationOpen();
+      toggleFormUpdateProductGroupOpen();
       setIsContentLoading(true);
-      await http.put(`/api/locations/${selectedLocation.id}`, formData);
-      await getLocations();
+      await http.put(`/api/productGroups/${selectedProductGroup.id}`, formData);
+      await getProductGroups();
     } catch (error) {
       setError(error);
     } finally {
@@ -79,11 +79,11 @@ function Locations() {
     }
   };
 
-  const handleDeleteLocation = async (location) => {
+  const handleDeleteProductGroup = async (productGroup) => {
     try {
       setIsContentLoading(true);
-      await http.delete(`/api/locations/${location.id}`);
-      await getLocations();
+      await http.delete(`/api/productGroups/${productGroup.id}`);
+      await getProductGroups();
     } catch (error) {
       setError(error);
     } finally {
@@ -111,14 +111,14 @@ function Locations() {
 
         const handleMenuClick = ({ key }) => {
           if (key === "Edit") {
-            setSelectedLocation(record);
-            toggleFormUpdateLocationOpen();
+            setSelectedProductGroup(record);
+            toggleFormUpdateProductGroupOpen();
           } else if (key === "Delete") {
             Modal.confirm({
-              title: "Delete Location",
-              content: "Are you sure you want to delete this location?",
+              title: "Delete Product Group",
+              content: "Are you sure you want to delete this product group?",
               onOk: async () => {
-                handleDeleteLocation(record);
+                handleDeleteProductGroup(record);
               },
             });
           }
@@ -145,38 +145,38 @@ function Locations() {
         <Row type="flex" justify="space-between" style={{ marginBottom: 16 }}>
           <Col></Col>
           <Col>
-            <Button type="primary" onClick={toggleFormCreateLocationOpen}>
-              Create Location
+            <Button type="primary" onClick={toggleFormCreateProductGroupOpen}>
+              Create Product Group
             </Button>
           </Col>
         </Row>
-        <Table columns={tableColumns} dataSource={locations} rowKey="id" />
+        <Table columns={tableColumns} dataSource={productGroups} rowKey="id" />
       </Spin>
 
       <Drawer
-        title="Create Location"
-        open={isFormCreateLocationOpen}
+        title="Create ProductGroup"
+        open={isFormCreateProductGroupOpen}
         destroyOnClose
         width={500}
-        onClose={toggleFormCreateLocationOpen}
+        onClose={toggleFormCreateProductGroupOpen}
       >
-        <FormLocation onSubmit={handleFormCreateLocationSubmit} />
+        <FormProductGroup onSubmit={handleFormCreateProductGroupSubmit} />
       </Drawer>
 
       <Drawer
-        title="Update Location"
-        open={isFormUpdateLocationOpen}
+        title="Update ProductGroup"
+        open={isFormUpdateProductGroupOpen}
         destroyOnClose
         width={500}
-        onClose={toggleFormUpdateLocationOpen}
+        onClose={toggleFormUpdateProductGroupOpen}
       >
-        <FormLocation
-          formData={selectedLocation}
-          onSubmit={handleFormUpdateLocationSubmit}
+        <FormProductGroup
+          formData={selectedProductGroup}
+          onSubmit={handleFormUpdateProductGroupSubmit}
         />
       </Drawer>
     </>
   );
 }
 
-export default Locations;
+export default ProductGroups;

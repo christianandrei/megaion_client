@@ -13,6 +13,7 @@ import Dashboard from "./pages/private/Dashboard/Index";
 import Products from "./pages/private/Products/Index";
 
 import PurchaseOrders from "./pages/private/PurchaseOrders/Index.jsx";
+import CreatePurchaseOrder from "./pages/private/PurchaseOrders/CreatePurchaseOrder/Index.jsx";
 
 import ProductGroups from "./pages/private/ProductGroups/Index.jsx";
 import Suppliers from "./pages/private/Suppliers/Index.jsx";
@@ -29,6 +30,12 @@ function App() {
       subTitle: "purchase order management",
       path: "/purchaseOrders",
       element: <PurchaseOrders />,
+    },
+    {
+      title: "Create Purchase Order",
+      subTitle: "create purchase order here",
+      path: "/createPurchaseOrder",
+      element: <CreatePurchaseOrder />,
     },
     {
       title: "Products",

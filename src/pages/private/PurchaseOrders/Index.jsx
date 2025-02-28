@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Spin,
   Row,
@@ -59,18 +60,6 @@ function PurchaseOrders() {
       await http.put(`/api/purchaseOrders/${purchaseOrder.id}`, {
         status: newStatus,
       });
-      await getPurchaseOrders();
-    } catch (error) {
-      setError(error);
-    } finally {
-      setIsContentLoading(false);
-    }
-  };
-
-  const handleDeletePurchaseOrder = async (purchaseOrder) => {
-    try {
-      setIsContentLoading(true);
-      await http.delete(`/api/purchaseOrders/${purchaseOrder.id}`);
       await getPurchaseOrders();
     } catch (error) {
       setError(error);
@@ -157,28 +146,19 @@ function PurchaseOrders() {
           menuItems.pop();
         }
 
-        if (record.status === "Paid") {
+        if (record.status === "Paid" || record.status === "Cancelled") {
           menuItems.pop();
           menuItems.pop();
         }
 
         const handleMenuClick = ({ key }) => {
-          if (
-            key === "Approved" ||
-            key === "Fulfilled" ||
-            key === "Paid" ||
-            key === "Cancelled"
-          ) {
-            handleUpdatePurchaseOrder(record, key);
-          } else if (key === "Delete") {
-            Modal.confirm({
-              title: "Delete Purchase Order",
-              content: "Are you sure you want to delete this purchase order?",
-              onOk: async () => {
-                handleDeletePurchaseOrder(record);
-              },
-            });
-          }
+          Modal.confirm({
+            title: `${key} Purchase Order`,
+            content: `Are you sure you want to ${key.toLowerCase()} this purchase order?`,
+            onOk: async () => {
+              handleUpdatePurchaseOrder(record, key);
+            },
+          });
         };
 
         return (
@@ -266,7 +246,9 @@ function PurchaseOrders() {
         <Row type="flex" justify="space-between" style={{ marginBottom: 16 }}>
           <Col></Col>
           <Col>
-            <Button type="primary">Create Purchase Order</Button>
+            <Link to="/createPurchaseOrder">
+              <Button type="primary">Create Purchase Order</Button>
+            </Link>
           </Col>
         </Row>
         <Tabs defaultActiveKey="1" items={tabItems} />

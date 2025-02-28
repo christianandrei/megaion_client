@@ -19,7 +19,7 @@ const FormSupplier = ({ formData, onSubmit }) => {
       }
     }
 
-    onSubmit({ ...values, status: "Active" });
+    onSubmit(values);
   };
 
   const layout = {

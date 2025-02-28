@@ -1,47 +1,29 @@
 import { useEffect, useState } from "react";
-import { Spin, Row, Col, Button, Drawer, Table, Modal, Dropdown } from "antd";
-import { MoreOutlined } from "@ant-design/icons";
+import { Spin, Tabs, Badge, Empty } from "antd";
+import {
+  HomeOutlined,
+  LoadingOutlined,
+  SettingFilled,
+  SmileOutlined,
+  SyncOutlined,
+} from "@ant-design/icons";
 
-import ErrorContent from "../../../components/common/ErrorContent";
-import FormProduct from "./components/FormProduct";
+import NewProductItems from "./components/NewProductItems/Index";
+import ProductsListing from "./components/Products/Index";
 
 import http from "../../../services/httpService";
 
-import { getColumnSearchProps } from "../../../helpers/TableFilterProps";
-
 function Products() {
-  const [products, setProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-
-  const [productCategories, setProductCategories] = useState([]);
-  const [productGroups, setProductGroups] = useState([]);
-  const [purchaseOrders, setPurchaseOrders] = useState();
-
-  const [isFormCreateProductOpen, setIsFormCreateProductOpen] = useState(false);
-  const [isFormUpdateProductOpen, setIsFormUpdateProductOpen] = useState(false);
+  const [newProductItemCount, setNewProductItemCount] = useState(0);
 
   const [isContentLoading, setIsContentLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const getProducts = async () => {
-    const { data } = await http.get("/api/products");
-    setProducts(data);
-  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchNewProductItems = async () => {
       try {
         setIsContentLoading(true);
-        const { data: productCategories } = await http.get(
-          "/api/productCategories"
-        );
-        const { data: productGroups } = await http.get("/api/productGroups");
-        const { data: purchaseOrders } = await http.get("/api/purchaseOrders");
-
-        await getProducts();
-        setProductCategories(productCategories);
-        setProductGroups(productGroups);
-        setPurchaseOrders(purchaseOrders);
+        const { data } = await http.get("/api/productItems/new");
+        setNewProductItemCount(data.length);
       } catch (error) {
         setError(error);
       } finally {
@@ -49,159 +31,39 @@ function Products() {
       }
     };
 
-    fetchProducts();
+    fetchNewProductItems();
   }, []);
 
-  if (error) {
-    return <ErrorContent />;
-  }
-
-  const toggleFormCreateProductOpen = () => {
-    setIsFormCreateProductOpen(!isFormCreateProductOpen);
-  };
-
-  const toggleFormUpdateProductOpen = () => {
-    setIsFormUpdateProductOpen(!isFormUpdateProductOpen);
-  };
-
-  const handleFormCreateProductSubmit = async (formData) => {
-    try {
-      toggleFormCreateProductOpen();
-      setIsContentLoading(true);
-      await http.post("/api/products", { ...formData, status: "Active" });
-      await getProducts();
-    } catch (error) {
-      setError(error);
-    } finally {
-      setIsContentLoading(false);
-    }
-  };
-
-  const handleFormUpdateProductSubmit = async (formData) => {
-    try {
-      toggleFormUpdateProductOpen();
-      setIsContentLoading(true);
-      await http.put(`/api/products/${selectedProduct.id}`, formData);
-      await getProducts();
-    } catch (error) {
-      setError(error);
-    } finally {
-      setIsContentLoading(false);
-    }
-  };
-
-  const handleDeleteProduct = async (product) => {
-    try {
-      setIsContentLoading(true);
-      await http.delete(`/api/products/${product.id}`);
-      await getProducts();
-    } catch (error) {
-      setError(error);
-    } finally {
-      setIsContentLoading(false);
-    }
-  };
-
-  const tableColumns = [
+  const tabItems = [
     {
-      title: "Name",
-      dataIndex: "name",
-      ...getColumnSearchProps("name"),
+      key: "1",
+      label: (
+        <>
+          New Product Items{" "}
+          {isContentLoading ? (
+            <SyncOutlined spin />
+          ) : (
+            newProductItemCount > 0 && (
+              <Badge count={newProductItemCount} color="green" />
+            )
+          )}
+        </>
+      ),
+      children: <NewProductItems onFetchFinish={setNewProductItemCount} />,
     },
     {
-      title: "Action",
-      width: 50,
-      render: (_, record) => {
-        const menuItems = [
-          { key: "Edit", label: "Edit" },
-          {
-            type: "divider",
-          },
-          { key: "Delete", label: "Delete", danger: true },
-        ];
-
-        const handleMenuClick = ({ key }) => {
-          if (key === "Edit") {
-            setSelectedProduct(record);
-            toggleFormUpdateProductOpen();
-          } else if (key === "Delete") {
-            Modal.confirm({
-              title: "Delete Product",
-              content: "Are you sure you want to delete this product?",
-              onOk: async () => {
-                handleDeleteProduct(record);
-              },
-            });
-          }
-        };
-
-        return (
-          <Dropdown
-            menu={{ items: menuItems, onClick: handleMenuClick }}
-            trigger={["click"]}
-            placement="bottomRight"
-          >
-            <Button shape="circle" onClick={(e) => e.stopPropagation()}>
-              <MoreOutlined />
-            </Button>
-          </Dropdown>
-        );
-      },
+      key: "2",
+      label: "Products",
+      children: <ProductsListing />,
+    },
+    {
+      key: "3",
+      label: "Inventory",
+      children: null,
     },
   ];
 
-  return (
-    <>
-      <Spin spinning={isContentLoading} tip="loading ...">
-        <Row type="flex" justify="space-between" style={{ marginBottom: 16 }}>
-          <Col></Col>
-          <Col>
-            <Button type="primary" onClick={toggleFormCreateProductOpen}>
-              Create Product
-            </Button>
-          </Col>
-        </Row>
-        <Table columns={tableColumns} dataSource={products} rowKey="id" />
-      </Spin>
-
-      <Drawer
-        title="Create Product"
-        open={isFormCreateProductOpen}
-        destroyOnClose
-        width={600}
-        onClose={toggleFormCreateProductOpen}
-      >
-        <FormProduct
-          supportingData={{
-            productCategories,
-            productGroups,
-            products,
-            purchaseOrders,
-          }}
-          onSubmit={handleFormCreateProductSubmit}
-        />
-      </Drawer>
-
-      <Drawer
-        title="Update Product"
-        open={isFormUpdateProductOpen}
-        destroyOnClose
-        width={600}
-        onClose={toggleFormUpdateProductOpen}
-      >
-        <FormProduct
-          formData={selectedProduct}
-          supportingData={{
-            productCategories,
-            productGroups,
-            products,
-            purchaseOrders,
-          }}
-          onSubmit={handleFormUpdateProductSubmit}
-        />
-      </Drawer>
-    </>
-  );
+  return <Tabs defaultActiveKey="2" items={tabItems} />;
 }
 
 export default Products;

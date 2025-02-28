@@ -20,6 +20,7 @@ import ErrorContent from "../../../components/common/ErrorContent";
 import http from "../../../services/httpService";
 
 import { getColumnSearchProps } from "../../../helpers/TableFilterProps";
+import { formatWithComma } from "../../../helpers/numbers";
 
 const { Text } = Typography;
 
@@ -101,6 +102,7 @@ function PurchaseOrders() {
       title: "Amount",
       dataIndex: "total_amount",
       width: 100,
+      render: (text) => formatWithComma(text),
     },
     {
       title: "Status",

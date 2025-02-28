@@ -46,8 +46,6 @@ function CreatePurchaseOrder() {
         );
         setProducts(products);
         setPurcaseOrder(purchaseOrder);
-
-        console.log(purchaseOrder);
       } catch (error) {
         console.log(error);
         setError(error);

@@ -34,11 +34,6 @@ function Sidebar() {
       label: <Link to="/products">Products</Link>,
     },
     {
-      key: "/inventory",
-      icon: <FileDoneOutlined />,
-      label: <Link to="/inventory">Inventory</Link>,
-    },
-    {
       key: "/purchaseOrders",
       icon: <ShoppingCartOutlined />,
       label: <Link to="/purchaseOrders">Purchase Orders</Link>,

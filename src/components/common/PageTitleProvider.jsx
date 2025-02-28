@@ -1,4 +1,6 @@
-import { Layout, Typography, Space, theme } from "antd";
+import { useNavigate } from "react-router-dom";
+import { Layout, Typography, Space, Button, theme } from "antd";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 
@@ -7,11 +9,22 @@ function PageTitleProvider({ route, children }) {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  const { title, subTitle } = route;
+  const navigate = useNavigate();
+
+  const { title, subTitle, isWithBackButton } = route;
 
   return (
     <>
       <Space>
+        {isWithBackButton && (
+          <Button
+            type="link"
+            style={{ paddingLeft: 0 }}
+            onClick={() => navigate(-1)}
+          >
+            <ArrowLeftOutlined />
+          </Button>
+        )}
         <Title level={4} style={{ margin: 0, padding: "16px 0 24px" }}>
           {title}
         </Title>

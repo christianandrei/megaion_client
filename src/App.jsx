@@ -14,6 +14,7 @@ import Products from "./pages/private/Products/Index";
 
 import PurchaseOrders from "./pages/private/PurchaseOrders/Index.jsx";
 import CreatePurchaseOrder from "./pages/private/PurchaseOrders/CreatePurchaseOrder/Index.jsx";
+import ViewPurchaseOrder from "./pages/private/PurchaseOrders/ViewPurchaseOrder.jsx";
 
 import ProductGroups from "./pages/private/ProductGroups/Index.jsx";
 import Suppliers from "./pages/private/Suppliers/Index.jsx";
@@ -34,8 +35,15 @@ function App() {
     {
       title: "Create Purchase Order",
       subTitle: "create purchase order here",
-      path: "/createPurchaseOrder",
+      path: "/purchaseOrders/create",
       element: <CreatePurchaseOrder />,
+    },
+    {
+      title: "View Purchase Order",
+      subTitle: "view your purchase order here",
+      path: "/purchaseOrders/:purchaseOrderId",
+      element: <ViewPurchaseOrder />,
+      isWithBackButton: true,
     },
     {
       title: "Products",

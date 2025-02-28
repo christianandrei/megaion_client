@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Spin,
   Row,
@@ -25,10 +25,11 @@ const { Text } = Typography;
 
 function PurchaseOrders() {
   const [purchaseOrders, setPurchaseOrders] = useState([]);
-  const [selectedPurchaseOrder, setSelectedPurchaseOrder] = useState(null);
 
   const [isContentLoading, setIsContentLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   const getPurchaseOrders = async () => {
     const { data } = await http.get("/api/purchaseOrders");
@@ -152,13 +153,17 @@ function PurchaseOrders() {
         }
 
         const handleMenuClick = ({ key }) => {
-          Modal.confirm({
-            title: `${key} Purchase Order`,
-            content: `Are you sure you want to ${key.toLowerCase()} this purchase order?`,
-            onOk: async () => {
-              handleUpdatePurchaseOrder(record, key);
-            },
-          });
+          if (key === "View") {
+            navigate(`/purchaseOrders/${record.id}`);
+          } else {
+            Modal.confirm({
+              title: `${key} Purchase Order`,
+              content: `Are you sure you want to ${key.toLowerCase()} this purchase order?`,
+              onOk: async () => {
+                handleUpdatePurchaseOrder(record, key);
+              },
+            });
+          }
         };
 
         return (
@@ -246,7 +251,7 @@ function PurchaseOrders() {
         <Row type="flex" justify="space-between" style={{ marginBottom: 16 }}>
           <Col></Col>
           <Col>
-            <Link to="/createPurchaseOrder">
+            <Link to="/purchaseOrders/create">
               <Button type="primary">Create Purchase Order</Button>
             </Link>
           </Col>

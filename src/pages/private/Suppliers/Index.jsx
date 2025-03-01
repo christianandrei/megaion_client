@@ -114,7 +114,7 @@ function Suppliers() {
       width: 50,
       render: (_, record) => {
         const menuItems = [
-          { key: "Edit", label: "Edit" },
+          { key: "Update", label: "Update" },
           {
             type: "divider",
           },
@@ -122,7 +122,7 @@ function Suppliers() {
         ];
 
         const handleMenuClick = ({ key }) => {
-          if (key === "Edit") {
+          if (key === "Update") {
             setSelectedSupplier(record);
             toggleFormUpdateSupplierOpen();
           } else if (key === "Delete") {

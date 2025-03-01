@@ -194,7 +194,7 @@ function CreatePurchaseOrder() {
       width: 50,
       render: (_, record) => {
         const menuItems = [
-          { key: "Edit", label: "Edit" },
+          { key: "Update", label: "Update" },
           {
             type: "divider",
           },
@@ -202,7 +202,7 @@ function CreatePurchaseOrder() {
         ];
 
         const handleMenuClick = ({ key }) => {
-          if (key === "Edit") {
+          if (key === "Update") {
             setSelectedPOItem(record);
             toggleFormUpdatePOItemOpen();
           } else if (key === "Delete") {

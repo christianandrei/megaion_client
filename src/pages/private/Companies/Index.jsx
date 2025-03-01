@@ -112,7 +112,7 @@ function Companies() {
       width: 50,
       render: (_, record) => {
         const menuItems = [
-          { key: "Edit", label: "Edit" },
+          { key: "Update", label: "Update" },
           {
             type: "divider",
           },
@@ -120,7 +120,7 @@ function Companies() {
         ];
 
         const handleMenuClick = ({ key }) => {
-          if (key === "Edit") {
+          if (key === "Update") {
             setSelectedCompany(record);
             toggleFormUpdateCompanyOpen();
           } else if (key === "Delete") {

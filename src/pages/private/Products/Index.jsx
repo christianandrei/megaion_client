@@ -37,9 +37,18 @@ function Products() {
   const tabItems = [
     {
       key: "1",
+      children: null,
+    },
+    {
+      key: "2",
+      label: "Products",
+      children: <ProductsListing />,
+    },
+    {
+      key: "3",
       label: (
         <>
-          New Product Items{" "}
+          Inventory{" "}
           {isContentLoading ? (
             <SyncOutlined spin />
           ) : (
@@ -49,16 +58,6 @@ function Products() {
           )}
         </>
       ),
-      children: <NewProductItems onFetchFinish={setNewProductItemCount} />,
-    },
-    {
-      key: "2",
-      label: "Products",
-      children: <ProductsListing />,
-    },
-    {
-      key: "3",
-      label: "Inventory",
       children: null,
     },
   ];

@@ -102,7 +102,7 @@ function ProductGroups() {
       width: 50,
       render: (_, record) => {
         const menuItems = [
-          { key: "Edit", label: "Edit" },
+          { key: "Update", label: "Update" },
           {
             type: "divider",
           },
@@ -110,7 +110,7 @@ function ProductGroups() {
         ];
 
         const handleMenuClick = ({ key }) => {
-          if (key === "Edit") {
+          if (key === "Update") {
             setSelectedProductGroup(record);
             toggleFormUpdateProductGroupOpen();
           } else if (key === "Delete") {

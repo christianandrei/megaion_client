@@ -102,7 +102,7 @@ function Locations() {
       width: 50,
       render: (_, record) => {
         const menuItems = [
-          { key: "Edit", label: "Edit" },
+          { key: "Update", label: "Update" },
           {
             type: "divider",
           },
@@ -110,7 +110,7 @@ function Locations() {
         ];
 
         const handleMenuClick = ({ key }) => {
-          if (key === "Edit") {
+          if (key === "Update") {
             setSelectedLocation(record);
             toggleFormUpdateLocationOpen();
           } else if (key === "Delete") {

@@ -71,6 +71,10 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
     return <Skeleton />;
   }
 
+  if (!productItem) {
+    return <Empty />;
+  }
+
   const toggleFormUpdateEquipmentOpen = () => {
     setIsFormUpdateEquipmentOpen(!isFormUpdateEquipmentOpen);
   };
@@ -91,8 +95,15 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
     }
   };
 
-  const { product, status_id, other_details, barcode, location, warehouse } =
-    productItem;
+  const {
+    product,
+    status_id,
+    other_details,
+    barcode,
+    location,
+    warehouse,
+    maintenance_interval_in_month,
+  } = productItem;
   const { product_group_id, product_category_id, name } = product;
 
   const descriptionItems = [
@@ -124,7 +135,10 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
       label: "Product Category:",
       children: `${product_category_id}`,
     },
-
+    {
+      label: "Maintenance Inverval in Month:",
+      children: maintenance_interval_in_month || <Tag color="red">N/A</Tag>,
+    },
     {
       label: "Barcode:",
       children: barcode || <Tag color="red">N/A</Tag>,
@@ -136,6 +150,10 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
     {
       label: "Warehouse:",
       children: warehouse?.name || <Tag color="red">N/A</Tag>,
+    },
+    {
+      label: "Other Details:",
+      children: other_details || "-",
     },
   ];
 

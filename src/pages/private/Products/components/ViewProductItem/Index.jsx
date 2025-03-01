@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Row, Col, Skeleton } from "antd";
+import { Row, Col, Skeleton, Empty } from "antd";
 
 import ErrorContent from "../../../../../components/common/ErrorContent";
 import ProductItemConsumableDetails from "./components/ProductItemConsumableDetails/Index";
@@ -40,7 +40,7 @@ function ViewProductItem() {
     return <ErrorContent />;
   }
 
-  if (!productItem) {
+  if (isContentLoading) {
     return (
       <Row>
         <Col span={12}>
@@ -51,28 +51,9 @@ function ViewProductItem() {
     );
   }
 
-  // const tabItems = [
-  //   {
-  //     key: "1",
-  //     label: "Inventory Movements",
-  //     children: <Empty />,
-  //   },
-  //   {
-  //     key: "3",
-  //     label: "Maintenance Records",
-  //     children: <Empty />,
-  //   },
-  //   {
-  //     key: "4",
-  //     label: "Calibration Records",
-  //     children: <Empty />,
-  //   },
-  //   {
-  //     key: "2",
-  //     label: "Warranty Claims",
-  //     children: <Empty />,
-  //   },
-  // ];
+  if (!productItem) {
+    return <Empty />;
+  }
 
   return (
     <Row>
@@ -88,9 +69,6 @@ function ViewProductItem() {
             productItemId={productItemId}
           />
         )}
-
-        {/* <Divider />
-          <Tabs defaultActiveKey="1" items={tabItems} /> */}
       </Col>
       <Col span={12}></Col>
     </Row>

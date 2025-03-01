@@ -37,13 +37,13 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
   const { statuses } = useDataStore();
 
   const getProductItemConsumables = async () => {
-    const { data: productItems } = await http.get(
+    const { data: productItem } = await http.get(
       `/api/productItems/${productId}/${productItemId}`
     );
     const { data: locations } = await http.get(`/api/locations`);
     const { data: warehouses } = await http.get(`/api/warehouses`);
 
-    setProductItem(productItems);
+    setProductItem(productItem);
     setLocations(locations);
     setWarehouses(warehouses);
   };
@@ -54,6 +54,7 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
         setIsContentLoading(true);
         await getProductItemConsumables();
       } catch (error) {
+        console.log(error);
         setError(error);
       } finally {
         setIsContentLoading(false);
@@ -67,8 +68,12 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
     return <ErrorContent />;
   }
 
-  if (!productItem || isContentLoading) {
+  if (isContentLoading) {
     return <Skeleton />;
+  }
+
+  if (!productItem) {
+    return <Empty />;
   }
 
   const toggleFormUpdateConsumableOpen = () => {
@@ -151,6 +156,10 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
     {
       label: "Warehouse:",
       children: warehouse?.name || <Tag color="red">N/A</Tag>,
+    },
+    {
+      label: "Other Details:",
+      children: other_details || "-",
     },
   ];
 

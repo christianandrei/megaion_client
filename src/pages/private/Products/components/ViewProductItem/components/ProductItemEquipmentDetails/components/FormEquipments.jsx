@@ -1,6 +1,16 @@
 import React, { useEffect } from "react";
-import { Form, Input, Button, Divider, DatePicker, Select } from "antd";
+import {
+  Form,
+  Input,
+  InputNumber,
+  Button,
+  Divider,
+  DatePicker,
+  Select,
+} from "antd";
 import dayjs from "dayjs";
+
+const { TextArea } = Input;
 
 const FormEquipment = ({ formData, supportingDetails, onSubmit }) => {
   const [formEquipmentInstance] = Form.useForm();
@@ -52,20 +62,13 @@ const FormEquipment = ({ formData, supportingDetails, onSubmit }) => {
       onKeyDown={handleKeyDown}
       onFinish={handleFormFinish}
     >
-      {/* <Form.Item
-        label="Batch Number"
-        name="batch_number"
-        rules={[{ required: true }]}
-      >
-        <Input />
-      </Form.Item>
       <Form.Item
-        label="Expiry Date"
-        name="expiry_date"
+        label="Maintenance Inverval "
+        name="maintenance_interval_in_month"
         rules={[{ required: true }]}
       >
-        <DatePicker />
-      </Form.Item> */}
+        <InputNumber placeholder="Months" />
+      </Form.Item>
       <Form.Item label="Barcode" name="barcode" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
@@ -93,6 +96,9 @@ const FormEquipment = ({ formData, supportingDetails, onSubmit }) => {
             label: w.name,
           }))}
         />
+      </Form.Item>
+      <Form.Item label="Other Details" name="other_details">
+        <TextArea rows={6} />
       </Form.Item>
       <Divider />
       <Form.Item noStyle>

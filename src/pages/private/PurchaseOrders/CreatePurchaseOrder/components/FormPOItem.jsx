@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
 import { Form, Input, InputNumber, Select, Button, Divider } from "antd";
 
+import useDataStore from "../../../../../store/DataStore";
+
 const FormPOItem = ({ formData, supportingData, onSubmit }) => {
   const [formPOItemInstance] = Form.useForm();
+
+  const { productUnits } = useDataStore();
 
   useEffect(() => {
     if (formData) {
@@ -63,13 +67,16 @@ const FormPOItem = ({ formData, supportingData, onSubmit }) => {
           }))}
         />
       </Form.Item>
-      <Form.Item label="Unit" name="product_unit" rules={[{ required: true }]}>
+      <Form.Item
+        label="Unit"
+        name="product_unit_id"
+        rules={[{ required: true }]}
+      >
         <Select
-          options={[
-            { value: "Box", label: "Box" },
-            { value: "Piece", label: "Piece" },
-            { value: "Pack", label: "Pack" },
-          ]}
+          options={Object.entries(productUnits).map(([key, value]) => ({
+            value: Number(key),
+            label: value,
+          }))}
         />
       </Form.Item>
       <Form.Item label="Quantity" name="quantity" rules={[{ required: true }]}>

@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { Form, Input, Button, Divider, DatePicker, Select } from "antd";
 import dayjs from "dayjs";
 
+const { TextArea } = Input;
+
 const FormConsumable = ({ formData, supportingDetails, onSubmit }) => {
   const [formConsumableInstance] = Form.useForm();
 
@@ -59,6 +61,7 @@ const FormConsumable = ({ formData, supportingDetails, onSubmit }) => {
       >
         <Input />
       </Form.Item>
+
       <Form.Item
         label="Expiry Date"
         name="expiry_date"
@@ -93,6 +96,9 @@ const FormConsumable = ({ formData, supportingDetails, onSubmit }) => {
             label: w.name,
           }))}
         />
+      </Form.Item>
+      <Form.Item label="Other Details" name="other_details">
+        <TextArea rows={6} />
       </Form.Item>
       <Divider />
       <Form.Item noStyle>

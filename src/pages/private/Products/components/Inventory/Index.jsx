@@ -13,6 +13,7 @@ import {
   Typography,
   Empty,
   Tag,
+  Image,
 } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import Barcode from "react-barcode";
@@ -88,6 +89,18 @@ function Inventory({ newProductItemCount }) {
 
   const tableColumns = [
     {
+      title: "",
+      render: () => {
+        return (
+          <Image
+            width={50}
+            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+          />
+        );
+      },
+      width: 100,
+    },
+    {
       title: "Name",
       render: (_, record) => {
         return <div>{record.product_name}</div>;
@@ -95,6 +108,7 @@ function Inventory({ newProductItemCount }) {
       ...getColumnSearchProps("product_name"),
     },
     { title: "Quantity", dataIndex: "quantity", width: 100 },
+    { title: "Unit", dataIndex: "unit", render: () => "Piece", width: 100 },
     {
       title: "Barcode",
       render: (_, record) => {
@@ -115,7 +129,13 @@ function Inventory({ newProductItemCount }) {
       ...getColumnSearchProps("barcode", "Search Barcode Here"),
       width: 200,
     },
-
+    { title: "Batch Number", dataIndex: "batch_number", width: 150 },
+    {
+      title: "Expired In",
+      dataIndex: "batch_number",
+      render: () => "6 days",
+      width: 150,
+    },
     {
       title: "Status",
       width: 100,
@@ -145,7 +165,7 @@ function Inventory({ newProductItemCount }) {
         const { product_id, id } = record;
         return (
           <Link to={`/productItems/${product_id}/${id}`}>
-            <Button type="primary">Update</Button>
+            <Button type="primary">View</Button>
           </Link>
         );
       },

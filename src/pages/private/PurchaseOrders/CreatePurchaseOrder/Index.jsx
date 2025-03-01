@@ -22,6 +22,7 @@ import FormPOItem from "./components/FormPOItem";
 
 import http from "../../../../services/httpService";
 import { formatWithComma } from "../../../../helpers/numbers";
+import useDataStore from "../../../../store/DataStore";
 
 const { Title, Text } = Typography;
 
@@ -44,6 +45,8 @@ function CreatePurchaseOrder() {
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
+
+  const { productUnits } = useDataStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -168,8 +171,9 @@ function CreatePurchaseOrder() {
     },
     {
       title: "Unit",
-      dataIndex: "product_unit",
+      dataIndex: "product_unit_id",
       width: 100,
+      render: (text) => productUnits[text],
     },
     {
       title: "Quantity",

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Spin,
   Row,
@@ -22,12 +23,8 @@ import { getColumnSearchProps } from "../../../../../helpers/TableFilterProps";
 
 const { Title } = Typography;
 
-function Inventory() {
-  const [newProductItemConsumables, setNewProductItemConsumables] = useState(
-    []
-  );
-  const [newProductItemEquipments, setNewProductItemEquipment] = useState([]);
-
+function Inventory({ newProductItemCount }) {
+  const [productItems, setProductItems] = useState([]);
   const [isContentLoading, setIsContentLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -35,7 +32,21 @@ function Inventory() {
     const fetchInventory = async () => {
       try {
         setIsContentLoading(true);
-        //const { data } = await http.get("/api/productItems/new");
+        const { data: productItemConsumables } = await http.get(
+          "/api/productItemConsumables"
+        );
+        const { data: productItemEquipments } = await http.get(
+          "/api/productItemEquipments"
+        );
+        const productItems = [
+          ...productItemConsumables,
+          ...productItemEquipments,
+        ].map((item) => ({
+          newId: `${item.product_id}-${item.id}`,
+          ...item,
+        }));
+
+        setProductItems(productItems);
       } catch (error) {
         setError(error);
       } finally {
@@ -56,23 +67,43 @@ function Inventory() {
 
       render: (_, record) => record.product.name,
     },
-    {
-      title: "Quantity",
-      render: (_, record) => record.inventory.quantity,
-      width: 100,
-    },
+    // {
+    //   title: "Quantity",
+    //   render: (_, record) => record.inventory.quantity,
+    //   width: 100,
+    // },
     {
       title: "Action",
       width: 50,
       render: (_, record) => {
-        return <Button type="primary">Update</Button>;
+        const { product_id, id } = record;
+        return (
+          <Link to={`/productItems/${product_id}/${id}`}>
+            <Button type="primary">Update</Button>
+          </Link>
+        );
       },
     },
   ];
 
   return (
     <>
-      <Spin spinning={isContentLoading} tip="loading ..."></Spin>
+      <Spin spinning={isContentLoading} tip="loading ...">
+        {newProductItemCount !== 0 && (
+          <Alert
+            message={`Update New Product Items`}
+            description={`${newProductItemCount} new product items found. Update new product items so that the unavailable quantity of the following products is restored.`}
+            showIcon
+            style={{ marginBottom: 16 }}
+          />
+        )}
+        <Table
+          columns={tableColumns}
+          dataSource={productItems}
+          rowKey="newId"
+          pagination={false}
+        />
+      </Spin>
     </>
   );
 }

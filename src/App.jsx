@@ -12,6 +12,7 @@ import PageTitleProvider from "./components/common/PageTitleProvider";
 import Dashboard from "./pages/private/Dashboard/Index";
 import Products from "./pages/private/Products/Index";
 
+import ViewProductItem from "./pages/private/Products/components/ViewProductItem/Index.jsx";
 import PurchaseOrders from "./pages/private/PurchaseOrders/Index.jsx";
 import CreatePurchaseOrder from "./pages/private/PurchaseOrders/CreatePurchaseOrder/Index.jsx";
 import ViewPurchaseOrder from "./pages/private/PurchaseOrders/ViewPurchaseOrder.jsx";
@@ -31,6 +32,14 @@ function App() {
       subTitle: "purchase order management",
       path: "/purchaseOrders",
       element: <PurchaseOrders />,
+    },
+
+    {
+      title: "View Product Item",
+      subTitle: "view product item full details",
+      path: "/productItems/:productId/:productItemId",
+      element: <ViewProductItem />,
+      isWithBackButton: true,
     },
     {
       title: "Create Purchase Order",

@@ -8,7 +8,7 @@ import {
   SyncOutlined,
 } from "@ant-design/icons";
 
-import NewProductItems from "./components/NewProductItems/Index";
+import Inventory from "./components/Inventory/Index";
 import ProductsListing from "./components/Products/Index";
 
 import http from "../../../services/httpService";
@@ -37,15 +37,6 @@ function Products() {
   const tabItems = [
     {
       key: "1",
-      children: null,
-    },
-    {
-      key: "2",
-      label: "Products",
-      children: <ProductsListing />,
-    },
-    {
-      key: "3",
       label: (
         <>
           Inventory{" "}
@@ -58,11 +49,16 @@ function Products() {
           )}
         </>
       ),
-      children: null,
+      children: <Inventory newProductItemCount={newProductItemCount} />,
+    },
+    {
+      key: "2",
+      label: "Products",
+      children: <ProductsListing />,
     },
   ];
 
-  return <Tabs defaultActiveKey="2" items={tabItems} />;
+  return <Tabs defaultActiveKey="1" items={tabItems} />;
 }
 
 export default Products;

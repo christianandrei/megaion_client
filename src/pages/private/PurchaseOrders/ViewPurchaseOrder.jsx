@@ -15,6 +15,7 @@ import {
   Descriptions,
   Input,
   Empty,
+  Skeleton,
   Tag,
 } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
@@ -62,11 +63,7 @@ function CreatePurchaseOrder() {
   }
 
   if (!purchaseOrder) {
-    return (
-      <Spin spinning={isContentLoading} tip="loading ...">
-        <Empty />
-      </Spin>
-    );
+    return <Skeleton />;
   }
 
   const tableColumns = [

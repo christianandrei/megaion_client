@@ -10,25 +10,31 @@ import http from "../services/httpService";
 const AuthWrapper = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [isUnauthorize, setIsUnauthorize] = useState(false);
 
   const { setUser } = useUserStore();
 
   useEffect(() => {
     const getData = async () => {
       try {
-        //const { data } = await http.get("/api/user");
-        const data = {};
+        const { data } = await http.get("/api/user");
+        //const data = {};
         const { user_id, name, roles } = data;
         setUser({
-          id: user_id || 1,
-          name: name || "Admin",
-          roles: data.roles || [],
+          id: user_id,
+          name: name,
+          roles: roles,
           type: "Admin",
           // status: data.status
         });
       } catch (error) {
         console.log(error);
-        setIsError(true);
+        if (error.response.status === 401) {
+          //window.location = "/login";
+          setIsUnauthorize(true);
+        } else {
+          setIsError(true);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -36,6 +42,10 @@ const AuthWrapper = () => {
 
     getData();
   }, []);
+
+  if (isUnauthorize) {
+    return <Outlet />;
+  }
 
   if (isLoading) {
     return (

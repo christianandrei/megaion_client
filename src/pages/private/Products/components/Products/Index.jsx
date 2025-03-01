@@ -10,6 +10,7 @@ import {
   Dropdown,
   Tag,
   Typography,
+  Image,
 } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 
@@ -117,6 +118,14 @@ function Products() {
 
   const tableColumns = [
     {
+      title: "",
+      dataIndex: "img_url",
+      render: (text) => {
+        return <Image width={50} src={text} />;
+      },
+      width: 100,
+    },
+    {
       title: "Name",
       dataIndex: "name",
       ...getColumnSearchProps("name"),
@@ -124,11 +133,13 @@ function Products() {
         return (
           <>
             <div>{record.name}</div>
-            {/* <div>
-              <Text type="secondary">
-                Selling Price: {record.selling_price}
-              </Text>
-            </div> */}
+            <div>
+              {record.description ? (
+                <Text type="secondary">{record.description}</Text>
+              ) : (
+                ""
+              )}
+            </div>
           </>
         );
       },

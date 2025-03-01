@@ -19,6 +19,7 @@ const FormProduct = ({ formData, supportingData, onSubmit }) => {
   useEffect(() => {
     if (formData) {
       formProductInstance.setFieldsValue(formData);
+      setInventoryMovement(formData.inventory_movement);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
@@ -124,25 +125,21 @@ const FormProduct = ({ formData, supportingData, onSubmit }) => {
       )}
       {inventoryMovement !== "Purchase Order" && (
         <>
-          {/* <Form.Item
-            name="upload"
-            label="Upload"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-            // extra=""
+          <Form.Item
+            label="Image Url"
+            name="img_url"
+            rules={[{ required: true }]}
           >
-            <Upload
-              name="logo"
-              // action="/upload.do"
-              listType="picture"
-            >
-              <Button icon={<UploadOutlined />}>Click to upload</Button>
-            </Upload>
-          </Form.Item> */}
+            <Input />
+          </Form.Item>
           <Form.Item label="Name" name="name" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="Description" name="description">
+          <Form.Item
+            label="Description"
+            name="description"
+            rules={[{ required: true }]}
+          >
             <Input />
           </Form.Item>
           <Form.Item

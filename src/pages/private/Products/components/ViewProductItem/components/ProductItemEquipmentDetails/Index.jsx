@@ -21,6 +21,8 @@ import http from "../../../../../../../services/httpService";
 
 import useDataStore from "../../../../../../../store/DataStore";
 
+import StockLedger from "../StockLedger/Index";
+
 const { Title, Text } = Typography;
 
 function ProductItemEquipmentDetails({ productId, productItemId }) {
@@ -160,8 +162,10 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
   const tabItems = [
     {
       key: "1",
-      label: "Inventory Movements",
-      children: <Empty />,
+      label: "Stock Ledger",
+      children: (
+        <StockLedger productId={productId} productItemId={productItemId} />
+      ),
     },
     {
       key: "3",

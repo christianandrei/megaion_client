@@ -39,7 +39,20 @@ function Products() {
 
   const getProducts = async () => {
     const { data } = await http.get("/api/products");
-    setProducts(data);
+    const products = data.map((product) => {
+      let remarks = null;
+      if (product.available_qty <= 0) {
+        remarks = "No Stock";
+      } else if (product.minimum_qty > product.available_qty) {
+        remarks = "Low Stock";
+      }
+
+      return {
+        ...product,
+        remarks: remarks,
+      };
+    });
+    setProducts(products);
   };
 
   useEffect(() => {
@@ -146,8 +159,20 @@ function Products() {
     },
     {
       title: "Remarks",
+      dataIndex: "remarks",
       width: 150,
-      render: () => <Tag color="red">Low Stock</Tag>,
+      filters: [
+        {
+          text: "No Stock",
+          value: "No Stock",
+        },
+        {
+          text: "Low Stock",
+          value: "Low Stock",
+        },
+      ],
+      onFilter: (value, record) => record.remarks === value,
+      render: (text) => (text ? <Tag color="#f50">{text}</Tag> : "-"),
     },
     {
       title: "Available Qty.",

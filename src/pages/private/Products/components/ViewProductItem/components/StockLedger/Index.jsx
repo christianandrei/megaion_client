@@ -1,38 +1,32 @@
 import { useEffect, useState } from "react";
 import { Spin, Row, Col, Button, Drawer, Table, Modal, Dropdown } from "antd";
-import { MoreOutlined } from "@ant-design/icons";
 
 import ErrorContent from "../../../../../../../components/common/ErrorContent";
-import FormStockLedger from "./components/FormStocklLedger";
+import FormStockLedgerItem from "./components/FormStockLedgerItem";
 
 import http from "../../../../../../../services/httpService";
 
-import { getColumnSearchProps } from "../../../../../../../helpers/TableFilterProps";
+function StockLedger({ productId, productItemId }) {
+  const [stockLedgerItems, setStockLedgerItems] = useState([]);
 
-function StockLedgers({ productId, productItemId }) {
-  const [stockLedgers, setStockLedgers] = useState([]);
-  const [selectedStockLedger, setSelectedStockLedger] = useState(null);
-
-  const [isFormCreateStockLedgerOpen, setIsFormCreateStockLedgerOpen] =
-    useState(false);
-  const [isFormUpdateStockLedgerOpen, setIsFormUpdateStockLedgerOpen] =
+  const [isFormCreateStockLedgerItemOpen, setIsFormCreateStockLedgerItemOpen] =
     useState(false);
 
   const [isContentLoading, setIsContentLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const getStockLedgers = async () => {
+  const getStockLedgerItems = async () => {
     const { data } = await http.get(
       `/api/inventories/${productId}/${productItemId}`
     );
-    setStockLedgers(data);
+    setStockLedgerItems(data);
   };
 
   useEffect(() => {
-    const fetchStockLedgers = async () => {
+    const fetchStockLedgerItems = async () => {
       try {
         setIsContentLoading(true);
-        await getStockLedgers();
+        await getStockLedgerItems();
       } catch (error) {
         setError(error);
       } finally {
@@ -40,24 +34,20 @@ function StockLedgers({ productId, productItemId }) {
       }
     };
 
-    fetchStockLedgers();
+    fetchStockLedgerItems();
   }, []);
 
   if (error) {
     return <ErrorContent />;
   }
 
-  const toggleFormCreateStockLedgerOpen = () => {
-    setIsFormCreateStockLedgerOpen(!isFormCreateStockLedgerOpen);
+  const toggleFormCreateStockLedgerItemOpen = () => {
+    setIsFormCreateStockLedgerItemOpen(!isFormCreateStockLedgerItemOpen);
   };
 
-  const toggleFormUpdateStockLedgerOpen = () => {
-    setIsFormUpdateStockLedgerOpen(!isFormUpdateStockLedgerOpen);
-  };
-
-  const handleFormCreateStockLedgerSubmit = async (formData) => {
+  const handleFormCreateStockLedgerItemSubmit = async (formData) => {
     try {
-      toggleFormCreateStockLedgerOpen();
+      toggleFormCreateStockLedgerItemOpen();
       setIsContentLoading(true);
       await http.post("/api/inventories", {
         ...formData,
@@ -65,7 +55,7 @@ function StockLedgers({ productId, productItemId }) {
         product_id: Number(productId),
         product_item_id: Number(productItemId),
       });
-      await getStockLedgers();
+      await getStockLedgerItems();
     } catch (error) {
       setError(error);
     } finally {
@@ -98,25 +88,32 @@ function StockLedgers({ productId, productItemId }) {
         <Row type="flex" justify="space-between" style={{ marginBottom: 16 }}>
           <Col></Col>
           <Col>
-            <Button type="primary" onClick={toggleFormCreateStockLedgerOpen}>
+            <Button
+              type="primary"
+              onClick={toggleFormCreateStockLedgerItemOpen}
+            >
               Manual Adjustment
             </Button>
           </Col>
         </Row>
-        <Table columns={tableColumns} dataSource={stockLedgers} rowKey="id" />
+        <Table
+          columns={tableColumns}
+          dataSource={stockLedgerItems}
+          rowKey="id"
+        />
       </Spin>
 
       <Drawer
         title="Manual Adjustment"
-        open={isFormCreateStockLedgerOpen}
+        open={isFormCreateStockLedgerItemOpen}
         destroyOnClose
         width={500}
-        onClose={toggleFormCreateStockLedgerOpen}
+        onClose={toggleFormCreateStockLedgerItemOpen}
       >
-        <FormStockLedger onSubmit={handleFormCreateStockLedgerSubmit} />
+        <FormStockLedgerItem onSubmit={handleFormCreateStockLedgerItemSubmit} />
       </Drawer>
     </>
   );
 }
 
-export default StockLedgers;
+export default StockLedger;

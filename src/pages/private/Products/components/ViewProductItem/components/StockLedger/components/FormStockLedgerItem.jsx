@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { Form, InputNumber, Select, Button, Divider } from "antd";
 
-const FormStockLedger = ({ formData, onSubmit }) => {
-  const [formStockLedgerInstance] = Form.useForm();
+const FormStockLedgerItem = ({ formData, onSubmit }) => {
+  const [formStockLedgerItemInstance] = Form.useForm();
 
   useEffect(() => {
     if (formData) {
-      formStockLedgerInstance.setFieldsValue(formData);
+      formStockLedgerItemInstance.setFieldsValue(formData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
@@ -30,7 +30,7 @@ const FormStockLedger = ({ formData, onSubmit }) => {
   return (
     <Form
       {...layout}
-      form={formStockLedgerInstance}
+      form={formStockLedgerItemInstance}
       validateMessages={{
         required: "This is required.",
       }}
@@ -63,4 +63,4 @@ const FormStockLedger = ({ formData, onSubmit }) => {
   );
 };
 
-export default FormStockLedger;
+export default FormStockLedgerItem;

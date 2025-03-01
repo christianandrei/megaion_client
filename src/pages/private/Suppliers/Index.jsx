@@ -57,7 +57,7 @@ function Suppliers() {
     try {
       toggleFormCreateSupplierOpen();
       setIsContentLoading(true);
-      await http.post("/api/suppliers", { ...formData, status: "Active" });
+      await http.post("/api/suppliers", { ...formData, status_id: 1 });
       await getSuppliers();
     } catch (error) {
       setError(error);

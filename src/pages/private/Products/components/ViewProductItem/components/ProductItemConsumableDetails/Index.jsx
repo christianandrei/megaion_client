@@ -19,6 +19,8 @@ import ErrorContent from "../../../../../../../components/common/ErrorContent";
 
 import http from "../../../../../../../services/httpService";
 
+import useDataStore from "../../../../../../../store/DataStore";
+
 const { Title, Text } = Typography;
 
 function ProductItemConsumableDetails({ productId, productItemId }) {
@@ -31,6 +33,8 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
 
   const [isFormUpdateConsumableOpen, setIsFormUpdateConsumableOpen] =
     useState(false);
+
+  const { statuses } = useDataStore();
 
   const getProductItemConsumables = async () => {
     const { data: productItems } = await http.get(
@@ -77,7 +81,7 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
       setIsContentLoading(true);
       await http.put(`/api/productItemConsumables/${productItem.id}`, {
         ...formData,
-        status: "Active",
+        status_id: 1,
       });
       await getProductItemConsumables();
     } catch (error) {
@@ -89,7 +93,7 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
 
   const {
     product,
-    status,
+    status_id,
     batch_number,
     expiry_date,
     other_details,
@@ -98,6 +102,8 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
     warehouse,
   } = productItem;
   const { product_group_id, product_category_id, name } = product;
+
+  console.log(statuses, status_id);
 
   const descriptionItems = [
     {
@@ -113,7 +119,12 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
     },
     {
       label: "Status:",
-      children: status === "New" ? <Tag color="green">{status}</Tag> : status,
+      children:
+        status_id === 3 ? (
+          <Tag color="green">{statuses[status_id]}</Tag>
+        ) : (
+          statuses[status_id]
+        ),
     },
     {
       label: "Product Group:",

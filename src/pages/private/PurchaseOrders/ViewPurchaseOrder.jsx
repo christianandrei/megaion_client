@@ -25,6 +25,8 @@ import ErrorContent from "../../../components/common/ErrorContent";
 import http from "../../../services/httpService";
 import { formatWithComma } from "../../../helpers/numbers";
 
+import useDataStore from "../../../store/DataStore";
+
 const { Title, Text } = Typography;
 
 function CreatePurchaseOrder() {
@@ -35,6 +37,7 @@ function CreatePurchaseOrder() {
   const [error, setError] = useState(null);
 
   const { purchaseOrderId } = useParams();
+  const { statuses } = useDataStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -105,17 +108,17 @@ function CreatePurchaseOrder() {
     notes,
     subtotal_amount,
     total_amount,
-    status,
+    status_id,
   } = purchaseOrder;
 
   let statusColor = "orange";
-  if (status === "Approved") {
+  if (status_id === 5) {
     statusColor = "green";
-  } else if (status === "Fulfilled") {
+  } else if (status_id === 6) {
     statusColor = "blue";
-  } else if (status === "Paid") {
+  } else if (status_id === 7) {
     statusColor = "purple";
-  } else if (status === "Cancelled") {
+  } else if (status_id === 8) {
     statusColor = "red";
   }
 
@@ -130,7 +133,7 @@ function CreatePurchaseOrder() {
               </Title>
             </Col>
             <Col>
-              <Tag color={statusColor}>{status}</Tag>
+              <Tag color={statusColor}>{statuses[status_id]}</Tag>
             </Col>
           </Row>
           {supplier && (

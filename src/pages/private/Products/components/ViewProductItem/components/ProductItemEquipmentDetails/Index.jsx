@@ -19,6 +19,8 @@ import ErrorContent from "../../../../../../../components/common/ErrorContent";
 
 import http from "../../../../../../../services/httpService";
 
+import useDataStore from "../../../../../../../store/DataStore";
+
 const { Title, Text } = Typography;
 
 function ProductItemEquipmentDetails({ productId, productItemId }) {
@@ -31,6 +33,8 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
 
   const [isFormUpdateEquipmentOpen, setIsFormUpdateEquipmentOpen] =
     useState(false);
+
+  const { statuses } = useDataStore();
 
   const getProductItemEquipments = async () => {
     const { data: productItems } = await http.get(
@@ -77,7 +81,7 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
       setIsContentLoading(true);
       await http.put(`/api/productItemEquipments/${productItem.id}`, {
         ...formData,
-        status: "Active",
+        status_id: 1,
       });
       await getProductItemEquipments();
     } catch (error) {
@@ -87,7 +91,7 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
     }
   };
 
-  const { product, status, other_details, barcode, location, warehouse } =
+  const { product, status_id, other_details, barcode, location, warehouse } =
     productItem;
   const { product_group_id, product_category_id, name } = product;
 
@@ -105,7 +109,12 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
     },
     {
       label: "Status:",
-      children: status === "New" ? <Tag color="green">{status}</Tag> : status,
+      children:
+        status_id === 3 ? (
+          <Tag color="green">{statuses[status_id]}</Tag>
+        ) : (
+          statuses[status_id]
+        ),
     },
     {
       label: "Product Group:",

@@ -57,7 +57,7 @@ function Warehouses() {
     try {
       toggleFormCreateWarehouseOpen();
       setIsContentLoading(true);
-      await http.post("/api/warehouses", { ...formData, status: "Active" });
+      await http.post("/api/warehouses", { ...formData, status_id: 1 });
       await getWarehouses();
     } catch (error) {
       setError(error);

@@ -6,12 +6,12 @@ import {
   Col,
   Button,
   Table,
-  Modal,
   Dropdown,
   Tabs,
   Badge,
   Typography,
   Tag,
+  App,
 } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 
@@ -22,6 +22,8 @@ import http from "../../../services/httpService";
 import { getColumnSearchProps } from "../../../helpers/TableFilterProps";
 import { formatWithComma } from "../../../helpers/numbers";
 
+import useDataStore from "../../../store/DataStore";
+
 const { Text } = Typography;
 
 function PurchaseOrders() {
@@ -31,6 +33,8 @@ function PurchaseOrders() {
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
+  const { statuses } = useDataStore();
+  const { modal } = App.useApp();
 
   const getPurchaseOrders = async () => {
     const { data } = await http.get("/api/purchaseOrders");
@@ -56,11 +60,11 @@ function PurchaseOrders() {
     return <ErrorContent />;
   }
 
-  const handleUpdatePurchaseOrder = async (purchaseOrder, newStatus) => {
+  const handleUpdatePurchaseOrder = async (purchaseOrder, newStatusId) => {
     try {
       setIsContentLoading(true);
       await http.put(`/api/purchaseOrders/${purchaseOrder.id}`, {
-        status: newStatus,
+        status_id: Number(newStatusId),
       });
       await getPurchaseOrders();
     } catch (error) {
@@ -106,21 +110,20 @@ function PurchaseOrders() {
     },
     {
       title: "Status",
-      dataIndex: "status",
+      dataIndex: "status_id",
       width: 100,
-      render: (_, record) => {
-        const status = record.status;
+      render: (status_id) => {
         let color = "orange";
-        if (status === "Approved") {
+        if (status_id === 5) {
           color = "green";
-        } else if (status === "Fulfilled") {
+        } else if (status_id === 6) {
           color = "blue";
-        } else if (status === "Paid") {
+        } else if (status_id === 7) {
           color = "purple";
-        } else if (status === "Cancelled") {
+        } else if (status_id === 8) {
           color = "red";
         }
-        return <Tag color={color}>{status}</Tag>;
+        return <Tag color={color}>{statuses[status_id]}</Tag>;
       },
     },
     {
@@ -132,24 +135,24 @@ function PurchaseOrders() {
           {
             type: "divider",
           },
-          { key: "Cancelled", label: "Cancelled", danger: true },
+          { key: 8, label: statuses[8], danger: true },
         ];
 
-        if (record.status === "Pending") {
-          menuItems.unshift({ key: "Approved", label: "Approved" });
+        if (record.status_id === 4) {
+          menuItems.unshift({ key: 5, label: statuses[5] });
         }
 
-        if (record.status === "Approved") {
-          menuItems.unshift({ key: "Fulfilled", label: "Fulfilled" });
+        if (record.status_id === 5) {
+          menuItems.unshift({ key: 6, label: statuses[6] });
         }
 
-        if (record.status === "Fulfilled") {
-          menuItems.unshift({ key: "Paid", label: "Paid" });
+        if (record.status_id === 6) {
+          menuItems.unshift({ key: 7, label: statuses[7] });
           menuItems.pop();
           menuItems.pop();
         }
 
-        if (record.status === "Paid" || record.status === "Cancelled") {
+        if (record.status_id === 7 || record.status_id === 8) {
           menuItems.pop();
           menuItems.pop();
         }
@@ -158,9 +161,11 @@ function PurchaseOrders() {
           if (key === "View") {
             navigate(`/purchaseOrders/${record.id}`);
           } else {
-            Modal.confirm({
-              title: `${key} Purchase Order`,
-              content: `Are you sure you want to ${key.toLowerCase()} this purchase order?`,
+            modal.confirm({
+              title: `${statuses[key]} Purchase Order`,
+              content: `Are you sure you want to ${statuses[
+                key
+              ].toLowerCase()} this purchase order?`,
               onOk: async () => {
                 handleUpdatePurchaseOrder(record, key);
               },
@@ -183,10 +188,10 @@ function PurchaseOrders() {
     },
   ];
 
-  const pendingPOs = purchaseOrders.filter((po) => po.status === "Pending");
-  const approvedPOs = purchaseOrders.filter((po) => po.status === "Approved");
-  const fulfilledPOs = purchaseOrders.filter((po) => po.status === "Fulfilled");
-  const cancelledPos = purchaseOrders.filter((po) => po.status === "Cancelled");
+  const pendingPOs = purchaseOrders.filter((po) => po.status_id === 4);
+  const approvedPOs = purchaseOrders.filter((po) => po.status_id === 5);
+  const fulfilledPOs = purchaseOrders.filter((po) => po.status_id === 6);
+  const cancelledPos = purchaseOrders.filter((po) => po.status_id === 8);
 
   const tabItems = [
     {

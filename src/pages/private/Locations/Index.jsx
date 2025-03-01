@@ -57,7 +57,7 @@ function Locations() {
     try {
       toggleFormCreateLocationOpen();
       setIsContentLoading(true);
-      await http.post("/api/locations", { ...formData, status: "Active" });
+      await http.post("/api/locations", { ...formData, status_id: 1 });
       await getLocations();
     } catch (error) {
       setError(error);

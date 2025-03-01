@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
+import AuthWrapper from "./components/AuthWrapper.jsx";
 import PublicRoutes from "./components/PublicRoutes";
 import ProtectedRoutes from "./components/ProtectedRoutes.jsx";
 import RoleRoutes from "./components/RoleRoutes.jsx";
@@ -103,49 +104,51 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<PublicRoutes />}>
-        <Route path="/login" element={<Login />} />
-      </Route>
-      <Route path="/" element={<ProtectedRoutes />}>
-        <Route path="/" element={<Layout />}>
-          <Route
-            path="/dashboard"
-            element={
-              <PageTitleProvider
-                route={{
-                  title: "Dashboard",
-                  subTitle: "track, analyze, and optimize your operations",
-                }}
-              >
-                <Dashboard />
-              </PageTitleProvider>
-            }
-          />
-          <Route path="/" element={<RoleRoutes userType="Admin" />}>
-            {adminRoutes.map((route) => (
-              <Route
-                key={route.path}
-                path={route.path}
-                element={
-                  <PageTitleProvider route={route}>
-                    {route.element}
-                  </PageTitleProvider>
-                }
-              />
-            ))}
-          </Route>
-          <Route path="/" element={<RoleRoutes userType="Customer" />}>
-            {customerRoutes.map((route) => (
-              <Route
-                key={route.path}
-                path={route.path}
-                element={
-                  <PageTitleProvider route={route}>
-                    {route.element}
-                  </PageTitleProvider>
-                }
-              />
-            ))}
+      <Route path="/" element={<AuthWrapper />}>
+        <Route path="/" element={<PublicRoutes />}>
+          <Route path="/login" element={<Login />} />
+        </Route>
+        <Route path="/" element={<ProtectedRoutes />}>
+          <Route path="/" element={<Layout />}>
+            <Route
+              path="/dashboard"
+              element={
+                <PageTitleProvider
+                  route={{
+                    title: "Dashboard",
+                    subTitle: "track, analyze, and optimize your operations",
+                  }}
+                >
+                  <Dashboard />
+                </PageTitleProvider>
+              }
+            />
+            <Route path="/" element={<RoleRoutes userType="Admin" />}>
+              {adminRoutes.map((route) => (
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  element={
+                    <PageTitleProvider route={route}>
+                      {route.element}
+                    </PageTitleProvider>
+                  }
+                />
+              ))}
+            </Route>
+            <Route path="/" element={<RoleRoutes userType="Customer" />}>
+              {customerRoutes.map((route) => (
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  element={
+                    <PageTitleProvider route={route}>
+                      {route.element}
+                    </PageTitleProvider>
+                  }
+                />
+              ))}
+            </Route>
           </Route>
         </Route>
       </Route>

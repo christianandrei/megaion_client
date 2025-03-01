@@ -1,9 +1,9 @@
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { ConfigProvider, theme } from "antd";
+import { ConfigProvider, theme, App } from "antd";
 import "./assets/styles/app.css";
 
-import App from "./App.jsx";
+import AppContent from "./App.jsx";
 import useAppStore from "./store/AppStore";
 
 function Main() {
@@ -16,7 +16,9 @@ function Main() {
           algorithm: isDarkTheme ? theme.darkAlgorithm : theme.defaultAlgorithm,
         }}
       >
-        <App />
+        <App>
+          <AppContent />
+        </App>
       </ConfigProvider>
     </BrowserRouter>
   );

@@ -57,7 +57,7 @@ function ProductGroups() {
     try {
       toggleFormCreateProductGroupOpen();
       setIsContentLoading(true);
-      await http.post("/api/productGroups", { ...formData, status: "Active" });
+      await http.post("/api/productGroups", { ...formData, status_id: 1 });
       await getProductGroups();
     } catch (error) {
       setError(error);

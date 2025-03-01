@@ -59,11 +59,12 @@ const getColumnSearchProps = (dataIndex) => {
         .toLowerCase()
         .includes(value.toLowerCase());
     },
-    onFilterDropdownVisibleChange: (visible) => {
-      if (visible) {
-        //setTimeout(() => this.searchInput.select(), 100);
-        setTimeout(() => inputRef.focus(), 100);
-      }
+    filterDropdownProps: {
+      onOpenChange(open) {
+        if (open) {
+          setTimeout(() => inputRef.focus(), 100);
+        }
+      },
     },
   };
 };

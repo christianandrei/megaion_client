@@ -1,10 +1,11 @@
 import { create } from "zustand";
 
 const useUserStore = create((set) => ({
-  id: 1,
+  id: null,
   name: "",
+  roles: [],
   type: "Admin",
-  status: "For Verification",
+  // status: "For Verification",
   setUser: (user) => set((state) => ({ ...state, ...user })),
 }));
 

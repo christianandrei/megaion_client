@@ -1,64 +1,66 @@
 import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import { Skeleton, Result, Button } from "antd";
 
-import { useUserStore } from "store/userStore";
-import http from "services/httpService";
+import useUserStore from "../store/UserStore";
+import useDataStore from "../store/DataStore";
 
-import "assets/css/loader.css";
+import http from "../services/httpService";
 
 const AuthWrapper = () => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
-    const setUser = useUserStore(state => state.setUser);
+  const { setUser } = useUserStore();
 
-    useEffect(() => {
-        const getUser = async () => {
-            try {
-                const { data } = await http.get("/api/user");
-                setUser({
-                    id: data.id,
-                    name: `${data.lastname}, ${data.firstname}`,
-                    type: data.user_type,
-                    status: data.status
-                });
-            } catch (error) {
-                if (error.message !== "Request failed with status code 401") {
-                    setIsError(true);
-                }
-            } finally {
-                setIsLoading(false);
-            }
-        };
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        //const { data } = await http.get("/api/user");
+        const data = {};
+        const { user_id, name, roles } = data;
+        setUser({
+          id: user_id || 1,
+          name: name || "Admin",
+          roles: data.roles || [],
+          type: "Admin",
+          // status: data.status
+        });
+      } catch (error) {
+        console.log(error);
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-        getUser();
-    }, []);
+    getData();
+  }, []);
 
-    if (isLoading) {
-        return (
-            <div
-                className="is-flex is-justify-content-center is-align-items-center"
-                style={{ height: "100vh" }}
-            >
-                <div className="pulse-wrapper">
-                    <div className="pulse"></div>
-                </div>
-            </div>
-        );
-    }
+  if (isLoading) {
+    return (
+      <div style={{ padding: 200 }}>
+        <Skeleton />
+      </div>
+    );
+  }
 
-    if (isError) {
-        return (
-            <div
-                className="is-flex is-justify-content-center is-align-items-center"
-                style={{ height: "100vh" }}
-            >
-                Something went wrong!
-            </div>
-        );
-    }
+  if (isError) {
+    return (
+      <Result
+        status="500"
+        title="500"
+        subTitle="Sorry, something went wrong."
+        extra={
+          <Button type="primary" onClick={() => window.location.reload()}>
+            Try Again
+          </Button>
+        }
+      />
+    );
+  }
 
-    return <Outlet />;
+  return <Outlet />;
 };
 
 export default AuthWrapper;

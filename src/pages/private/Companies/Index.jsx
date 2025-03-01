@@ -55,7 +55,7 @@ function Companies() {
     try {
       toggleFormCreateCompanyOpen();
       setIsContentLoading(true);
-      await http.post("/api/companies", { ...formData, status: "Active" });
+      await http.post("/api/companies", { ...formData, status_id: 1 });
       await getCompanies();
     } catch (error) {
       setError(error);

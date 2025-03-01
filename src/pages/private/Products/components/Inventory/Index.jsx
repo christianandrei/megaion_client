@@ -12,14 +12,17 @@ import {
   Alert,
   Typography,
   Empty,
+  Tag,
 } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
+import Barcode from "react-barcode";
 
 import ErrorContent from "../../../../../components/common/ErrorContent";
 
 import http from "../../../../../services/httpService";
 
 import { getColumnSearchProps } from "../../../../../helpers/TableFilterProps";
+import useDataStore from "../../../../../store/DataStore";
 
 const { Title } = Typography;
 
@@ -27,6 +30,14 @@ function Inventory({ newProductItemCount }) {
   const [productItems, setProductItems] = useState([]);
   const [isContentLoading, setIsContentLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const { statuses } = useDataStore();
+
+  const computeQuantitySum = (movements, movementType) => {
+    return movements
+      .filter((movement) => movement.movement_type === movementType)
+      .reduce((sum, movement) => sum + movement.quantity, 0);
+  };
 
   useEffect(() => {
     const fetchInventory = async () => {
@@ -41,13 +52,27 @@ function Inventory({ newProductItemCount }) {
         const productItems = [
           ...productItemConsumables,
           ...productItemEquipments,
-        ].map((item) => ({
-          newId: `${item.product_id}-${item.id}`,
-          ...item,
-        }));
+        ].map((item) => {
+          const sumOfIncrements = computeQuantitySum(
+            item.inventoryMovements,
+            "Increment"
+          );
+          const sumOfDecrements = computeQuantitySum(
+            item.inventoryMovements,
+            "Decrement"
+          );
+
+          return {
+            newId: `${item.product_id}-${item.id}`,
+            product_name: item.product.name,
+            quantity: sumOfIncrements - sumOfDecrements,
+            ...item,
+          };
+        });
 
         setProductItems(productItems);
       } catch (error) {
+        console.log(error);
         setError(error);
       } finally {
         setIsContentLoading(false);
@@ -64,14 +89,55 @@ function Inventory({ newProductItemCount }) {
   const tableColumns = [
     {
       title: "Name",
-
-      render: (_, record) => record.product.name,
+      render: (_, record) => {
+        return <div>{record.product_name}</div>;
+      },
+      ...getColumnSearchProps("product_name"),
     },
-    // {
-    //   title: "Quantity",
-    //   render: (_, record) => record.inventory.quantity,
-    //   width: 100,
-    // },
+    { title: "Quantity", dataIndex: "quantity", width: 100 },
+    {
+      title: "Barcode",
+      render: (_, record) => {
+        return (
+          <div>
+            {record.barcode ? (
+              <Barcode
+                value={record.barcode}
+                height={20}
+                displayValue={false}
+              />
+            ) : (
+              "-"
+            )}
+          </div>
+        );
+      },
+      ...getColumnSearchProps("barcode", "Search Barcode Here"),
+      width: 200,
+    },
+
+    {
+      title: "Status",
+      width: 100,
+      filters: [
+        {
+          text: "New",
+          value: 3,
+        },
+        {
+          text: "Active",
+          value: 1,
+        },
+      ],
+      onFilter: (value, record) => record.status_id === value,
+      render: (_, { status_id }) => {
+        return status_id === 3 ? (
+          <Tag color="green">{statuses[status_id]}</Tag>
+        ) : (
+          statuses[status_id]
+        );
+      },
+    },
     {
       title: "Action",
       width: 50,

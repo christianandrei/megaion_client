@@ -5,7 +5,7 @@ import { TagsOutlined, SearchOutlined } from "@ant-design/icons";
 
 let inputRef = React.createRef();
 
-const getColumnSearchProps = (dataIndex) => {
+const getColumnSearchProps = (dataIndex, placeholder) => {
   return {
     filterDropdown: ({
       setSelectedKeys,
@@ -18,7 +18,7 @@ const getColumnSearchProps = (dataIndex) => {
           ref={(node) => {
             inputRef = node;
           }}
-          placeholder="Enter text here"
+          placeholder={placeholder || "Search here"}
           value={selectedKeys[0]}
           style={{
             width: 188,
@@ -54,10 +54,10 @@ const getColumnSearchProps = (dataIndex) => {
       <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
     onFilter: (value, record) => {
-      return record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase());
+      const recordValue = record[dataIndex];
+      return recordValue
+        ? recordValue.toString().toLowerCase().includes(value.toLowerCase())
+        : "";
     },
     filterDropdownProps: {
       onOpenChange(open) {

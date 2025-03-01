@@ -56,6 +56,7 @@ const FormPOItem = ({ formData, supportingData, onSubmit }) => {
     >
       <Form.Item label="Product" name="product_id" rules={[{ required: true }]}>
         <Select
+          showSearch
           options={products.map((product) => ({
             value: product.id,
             label: product.name,

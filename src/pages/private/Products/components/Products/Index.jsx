@@ -81,7 +81,7 @@ function Products() {
     try {
       toggleFormCreateProductOpen();
       setIsContentLoading(true);
-      await http.post("/api/products", { ...formData, status: "Active" });
+      await http.post("/api/products", { ...formData, status_id: 1 });
       await getProducts();
     } catch (error) {
       setError(error);

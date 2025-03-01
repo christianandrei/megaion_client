@@ -52,9 +52,7 @@ const FormProduct = ({ formData, supportingData, onSubmit }) => {
       selling_price: null,
     };
 
-    //onSubmit({ ...defaultValues, ...values });
-
-    console.log(values);
+    onSubmit({ ...defaultValues, ...values });
   };
 
   const layout = {
@@ -126,7 +124,7 @@ const FormProduct = ({ formData, supportingData, onSubmit }) => {
       )}
       {inventoryMovement !== "Purchase Order" && (
         <>
-          <Form.Item
+          {/* <Form.Item
             name="upload"
             label="Upload"
             valuePropName="fileList"
@@ -140,7 +138,7 @@ const FormProduct = ({ formData, supportingData, onSubmit }) => {
             >
               <Button icon={<UploadOutlined />}>Click to upload</Button>
             </Upload>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item label="Name" name="name" rules={[{ required: true }]}>
             <Input />
           </Form.Item>

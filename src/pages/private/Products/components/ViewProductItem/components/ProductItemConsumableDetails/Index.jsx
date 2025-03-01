@@ -103,8 +103,6 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
   } = productItem;
   const { product_group_id, product_category_id, name } = product;
 
-  console.log(statuses, status_id);
-
   const descriptionItems = [
     {
       label: "Image",

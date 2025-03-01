@@ -143,7 +143,7 @@ function CreatePurchaseOrder() {
       subtotal_amount: poSubtotal,
       total_amount: poTotal,
       notes,
-      status: "Pending",
+      status_id: 4,
       purchase_order_items: poItems,
     };
 

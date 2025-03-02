@@ -14,6 +14,7 @@ import {
   PieChartOutlined,
   MenuOutlined,
   GroupOutlined,
+  DatabaseOutlined,
 } from "@ant-design/icons";
 
 import useAppStore from "../../store/AppStore";
@@ -32,6 +33,11 @@ function Sidebar() {
       key: "/products",
       icon: <UnorderedListOutlined />,
       label: <Link to="/products">Products</Link>,
+    },
+    {
+      key: "/inventory",
+      icon: <DatabaseOutlined />,
+      label: <Link to="/inventory">Inventory</Link>,
     },
     {
       key: "/purchaseOrders",

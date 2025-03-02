@@ -91,6 +91,25 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
         ...formData,
         status_id: 1,
       });
+
+      const { data: stockLedgerItems } = await http.get(
+        `/api/inventories/${productId}`
+      );
+
+      const inventoryTotalQty = stockLedgerItems.reduce((acc, item) => {
+        if (item.movement_type == "Increment") {
+          acc += item.quantity;
+        } else if (item.movement_type == "Decrement") {
+          acc -= item.quantity;
+        }
+
+        return acc;
+      }, 0);
+
+      await http.put(`/api/products/${productId}`, {
+        available_qty: inventoryTotalQty,
+      });
+
       await getProductItemEquipments();
     } catch (error) {
       setError(error);
@@ -110,17 +129,14 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
     model_number,
     serial_number,
   } = productItem;
-  const { product_group_id, product_category_id, name } = product;
+  const { product_group_id, product_category_id, name, img_url } = product;
 
   const descriptionItems = [
     {
       label: "Image",
       children: (
         <div style={{ textAlign: "" }}>
-          <Image
-            width={150}
-            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-          />
+          <Image width={150} src={img_url} />
         </div>
       ),
     },

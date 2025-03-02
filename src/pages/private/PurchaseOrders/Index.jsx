@@ -73,7 +73,7 @@ function PurchaseOrders() {
         );
 
         const { purchase_order_items: purchaseOrderItems } = data;
-        console.log({ purchaseOrderItems });
+
         const consumableItems = purchaseOrderItems.filter(
           ({ product }) => product.product_category_id == 1
         );
@@ -104,7 +104,7 @@ function PurchaseOrders() {
           }
         );
 
-        const forInsertProductItemEquipment = equipmentItems.map(
+        const forInsertProductItemEquipments = equipmentItems.map(
           (equipmentItem) => {
             return {
               product_id: equipmentItem.product_id,
@@ -121,57 +121,15 @@ function PurchaseOrders() {
           }
         );
 
-        const { data: resConsumableItems } = await http.post(
+        await http.post(
           "/api/productItemConsumablesNew",
           forInsertProductItemConsumables
         );
-        const { data: resEquipmentItems } = await http.post(
+
+        await http.post(
           "/api/productItemEquipmentsNew",
-          forInsertProductItemEquipment
+          forInsertProductItemEquipments
         );
-
-        const forInsertInventoriesConsumables = resConsumableItems.map(
-          (resConsumableItems) => {
-            const { product_id, id } = resConsumableItems;
-            return {
-              product_id: product_id,
-              product_item_id: id,
-              quantity: purchaseOrderItems.find((pOI) => pOI.id === id)
-                .quantity,
-              movement_type: "Increment",
-              remarks: "Purchase Order",
-            };
-          }
-        );
-        const forInsertInventoriesEquipments = resEquipmentItems.map(
-          (resEquipmentItems) => {
-            const { product_id, id } = resEquipmentItems;
-            return {
-              product_id: product_id,
-              product_item_id: id,
-              quantity: 1,
-              movement_type: "Increment",
-              remarks: "Purchase Order",
-            };
-          }
-        );
-
-        const forInsertInventories = [
-          ...forInsertInventoriesConsumables,
-          ...forInsertInventoriesEquipments,
-        ];
-
-        const { data: resInventories } = await http.post(
-          "/api/inventoryItemsNew",
-          forInsertInventories
-        );
-
-        console.log({ forInsertProductItemConsumables });
-        console.log({ forInsertProductItemEquipment });
-        console.log({ resConsumableItems });
-        console.log({ resEquipmentItems });
-        console.log({ forInsertInventories });
-        console.log({ resInventories });
       }
 
       await getPurchaseOrders();

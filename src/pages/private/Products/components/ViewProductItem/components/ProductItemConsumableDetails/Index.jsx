@@ -92,7 +92,7 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
       });
 
       const { data: stockLedgerItems } = await http.get(
-        `/api/inventories/${productId}/${productItemId}`
+        `/api/inventories/${productId}`
       );
 
       const inventoryTotalQty = stockLedgerItems.reduce((acc, item) => {
@@ -128,17 +128,14 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
     location,
     warehouse,
   } = productItem;
-  const { product_group_id, product_category_id, name } = product;
+  const { product_group_id, product_category_id, name, img_url } = product;
 
   const descriptionItems = [
     {
       label: "Image",
       children: (
         <div style={{ textAlign: "" }}>
-          <Image
-            width={150}
-            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-          />
+          <Image width={150} src={img_url} />
         </div>
       ),
     },

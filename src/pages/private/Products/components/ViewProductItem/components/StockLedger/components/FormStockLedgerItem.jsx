@@ -37,7 +37,7 @@ const FormStockLedgerItem = ({ formData, onSubmit }) => {
       onFinish={handleFormFinish}
     >
       <Form.Item label="Quantity" name="quantity" rules={[{ required: true }]}>
-        <InputNumber />
+        <InputNumber min={0} />
       </Form.Item>
       <Form.Item
         label="Movement Type"

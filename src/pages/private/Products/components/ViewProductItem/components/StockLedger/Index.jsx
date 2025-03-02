@@ -57,7 +57,7 @@ function StockLedger({ productId, productItemId }) {
       });
 
       const { data: stockLedger } = await http.get(
-        `/api/inventories/${productId}/${productItemId}`
+        `/api/inventories/${productId}`
       );
 
       const inventoryTotalQty = stockLedger.reduce((acc, item) => {

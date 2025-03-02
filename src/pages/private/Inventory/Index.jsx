@@ -18,12 +18,12 @@ import {
 import { MoreOutlined } from "@ant-design/icons";
 import Barcode from "react-barcode";
 
-import ErrorContent from "../../../../../components/common/ErrorContent";
+import ErrorContent from "../../../components/common/ErrorContent";
 
-import http from "../../../../../services/httpService";
+import http from "../../../services/httpService";
 
-import { getColumnSearchProps } from "../../../../../helpers/TableFilterProps";
-import useDataStore from "../../../../../store/DataStore";
+import { getColumnSearchProps } from "../../../helpers/TableFilterProps";
+import useDataStore from "../../../store/DataStore";
 
 const { Title } = Typography;
 
@@ -185,14 +185,14 @@ function Inventory({ newProductItemCount }) {
   return (
     <>
       <Spin spinning={isContentLoading} tip="loading ...">
-        {newProductItemCount !== 0 && (
+        {/* {newProductItemCount !== 0 && (
           <Alert
             message={`Update New Product Items`}
             description={`${newProductItemCount} new product items found. Update new product items so that the unavailable quantity of the following products is restored.`}
             showIcon
             style={{ marginBottom: 16 }}
           />
-        )}
+        )} */}
         <Table
           columns={tableColumns}
           dataSource={productItems}

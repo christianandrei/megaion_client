@@ -126,7 +126,6 @@ function FormAllocation({ supportingData, onSubmit }) {
           movement_type: "Decrement",
           remarks: "Order",
           order_item_id: selectedOrderItem.id,
-          product_item_id: item.id,
           qty: decrement,
           batch_number: item.batch_number,
         };

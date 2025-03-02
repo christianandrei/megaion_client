@@ -22,6 +22,9 @@ import http from "../../../../../../../services/httpService";
 import useDataStore from "../../../../../../../store/DataStore";
 
 import StockLedger from "../StockLedger/Index";
+import Maintenances from "../Maintenance/Index";
+import Claims from "../Claims/Index";
+import Calibrations from "../Calibrations/Index";
 
 const { Title, Text } = Typography;
 
@@ -199,17 +202,17 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
     {
       key: "3",
       label: "Maintenance Records",
-      children: <Empty />,
+      children: <Maintenances productItemId={productItemId} />,
     },
     {
       key: "4",
       label: "Calibration Records",
-      children: <Empty />,
+      children: <Calibrations productItemId={productItemId} />,
     },
     {
       key: "2",
       label: "Warranty Claims",
-      children: <Empty />,
+      children: <Claims productItemId={productItemId} />,
     },
   ];
 

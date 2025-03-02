@@ -26,7 +26,7 @@ function ProductCard({ product, addToCart }) {
   let actions = [];
   if (product.available_qty === 0) {
     actions = [<Tag color="red">Not Available</Tag>];
-  } else if (product.product_category_id === 2) {
+  } else if (product.product_category_id === 3) {
     actions = [<Tag color="orange">Call To Order</Tag>];
   } else {
     actions = [

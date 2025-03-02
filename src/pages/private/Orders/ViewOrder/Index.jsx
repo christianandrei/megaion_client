@@ -50,13 +50,15 @@ function ViewOrder() {
         setIsContentLoading(true);
         const { data: order } = await http.get(`/api/orders/${orderId}`);
 
+        console.log(order);
+
         const newOrderItems = order.order_items.map((orderItem) => ({
           ...orderItem,
-          orderItemAllocations: [],
+          orderItemAllocations: orderItem.order_items_allocation,
         }));
 
         order.order_items = newOrderItems;
-        order.latest_status.status.id = 10;
+        // order.latest_status.status.id = 10;
 
         setOrder(order);
       } catch (error) {
@@ -130,7 +132,14 @@ function ViewOrder() {
       });
 
       console.log({
-        forInsertInventory,
+        order_id: order.id,
+        forInventoryInsert: forInsertInventory,
+        forOrderItemsAllocationInsert: forOrderItemsAllocationInsert,
+      });
+
+      await http.post("/api/saveOrderAllocation", {
+        order_id: order.id,
+        forInventoryInsert: forInsertInventory,
         forOrderItemsAllocationInsert,
       });
     } catch (error) {
@@ -242,9 +251,6 @@ function ViewOrder() {
                           <Space>
                             <span>
                               <strong>Quantity Allocated</strong>: {item.qty}
-                            </span>
-                            <span>
-                              <strong>Batch Number</strong>: {item.batch_number}
                             </span>
                           </Space>
                         </div>

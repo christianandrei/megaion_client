@@ -63,7 +63,8 @@ function Orders() {
   const handleUpdateOrder = async (order, newStatusId) => {
     try {
       setIsContentLoading(true);
-      await http.put(`/api/orders/${order.id}`, {
+      await http.post(`/api/orderStatuses`, {
+        order_id: order.id,
         status_id: Number(newStatusId),
       });
       await getOrders();
@@ -104,11 +105,7 @@ function Orders() {
         const status_id = record.latest_status.status.id;
 
         let color = "orange";
-        if (status_id === 5) {
-          color = "green";
-        } else if (status_id === 6) {
-          color = "blue";
-        } else if (status_id === 7) {
+        if (status_id === 11 || status_id === 12) {
           color = "purple";
         } else if (status_id === 8) {
           color = "red";
@@ -128,25 +125,24 @@ function Orders() {
           { key: 8, label: statuses[8], danger: true },
         ];
 
-        // if (record.status_id === 4) {
-        //   menuItems.unshift({ key: 5, label: statuses[5] });
-        // }
+        const status_id = record.latest_status.status.id;
 
-        // if (record.status_id === 5) {
-        //   menuItems.unshift({ key: 6, label: statuses[6] });
-        // }
+        if (status_id === 10) {
+          menuItems.unshift({ key: 11, label: statuses[11] });
+          menuItems.pop();
+          menuItems.pop();
+        }
 
-        // if (record.status_id === 6) {
-        //   menuItems.unshift({ key: 7, label: statuses[7] });
-        //   menuItems.unshift({ key: 5, label: statuses[5] });
-        //   menuItems.pop();
-        //   menuItems.pop();
-        // }
+        if (status_id === 11) {
+          menuItems.unshift({ key: 12, label: statuses[12] });
+          menuItems.pop();
+          menuItems.pop();
+        }
 
-        // if (record.status_id === 7 || record.status_id === 8) {
-        //   menuItems.pop();
-        //   menuItems.pop();
-        // }
+        if (status_id === 12) {
+          menuItems.pop();
+          menuItems.pop();
+        }
 
         const handleMenuClick = ({ key }) => {
           if (key === "View") {
@@ -180,7 +176,7 @@ function Orders() {
   ];
 
   const onHoldOs = orders.filter((o) => o.latest_status.status.id === 9);
-  const approvedOs = orders.filter((o) => o.latest_status.status.id === 10);
+  const processingOs = orders.filter((o) => o.latest_status.status.id === 10);
   const inTransitOs = orders.filter((o) => o.latest_status.status.id === 11);
   const deliveredOs = orders.filter((o) => o.latest_status.status.id === 12);
   const cancelledOs = orders.filter((o) => o.latest_status.status.id === 8);
@@ -205,13 +201,13 @@ function Orders() {
       label: (
         <>
           Processing{" "}
-          {approvedOs.length > 0 && (
-            <Badge count={approvedOs.length} color="green" />
+          {processingOs.length > 0 && (
+            <Badge count={processingOs.length} color="gold" />
           )}
         </>
       ),
       children: (
-        <Table columns={tableColumns} dataSource={approvedOs} rowKey="id" />
+        <Table columns={tableColumns} dataSource={processingOs} rowKey="id" />
       ),
     },
     {
@@ -220,7 +216,7 @@ function Orders() {
         <>
           In Transit{" "}
           {inTransitOs.length > 0 && (
-            <Badge count={inTransitOs.length} color="blue" />
+            <Badge count={inTransitOs.length} color="gold" />
           )}
         </>
       ),

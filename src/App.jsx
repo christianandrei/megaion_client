@@ -31,6 +31,8 @@ import Inventory from "./pages/private/Inventory/Index.jsx";
 
 import Ecommerce from "./pages/private/Ecommerce/Index";
 
+import ViewOrder from "./pages/private/Orders/ViewOrder/Index.jsx";
+
 function App() {
   const adminRoutes = [
     {
@@ -39,7 +41,12 @@ function App() {
       path: "/purchaseOrders",
       element: <PurchaseOrders />,
     },
-
+    {
+      title: "View Order",
+      subTitle: "view order full details",
+      path: "/orders/:orderId",
+      element: <ViewOrder />,
+    },
     {
       title: "View Product Item",
       subTitle: "view product item full details",

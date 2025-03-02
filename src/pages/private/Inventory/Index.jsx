@@ -86,6 +86,7 @@ function Inventory({ newProductItemCount }) {
           });
 
         setProductItems(productItems);
+        console.log(productItems);
       } catch (error) {
         console.log(error);
         setError(error);

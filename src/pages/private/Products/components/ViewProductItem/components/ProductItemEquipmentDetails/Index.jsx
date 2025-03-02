@@ -93,7 +93,7 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
       });
 
       const { data: stockLedgerItems } = await http.get(
-        `/api/inventories/${productId}`
+        `/api/inventories/${productId}/${productItemId}`
       );
 
       const inventoryTotalQty = stockLedgerItems.reduce((acc, item) => {

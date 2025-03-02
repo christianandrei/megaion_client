@@ -40,7 +40,7 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
 
   const getProductItemEquipments = async () => {
     const { data: productItems } = await http.get(
-      `/api/productItems/${productId}/${productItemId}`
+      `/api/productItemEquipments/${productItemId}`
     );
     const { data: locations } = await http.get(`/api/locations`);
     const { data: warehouses } = await http.get(`/api/warehouses`);
@@ -66,7 +66,9 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
   }, []);
 
   if (error) {
-    return <ErrorContent />;
+    console.log(error.response);
+    console.log(error.response.data);
+    return <ErrorContent error={error?.response?.data?.message} />;
   }
 
   if (!productItem || isContentLoading) {
@@ -105,6 +107,8 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
     location,
     warehouse,
     maintenance_interval_in_month,
+    model_number,
+    serial_number,
   } = productItem;
   const { product_group_id, product_category_id, name } = product;
 
@@ -137,6 +141,15 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
       label: "Product Category:",
       children: `${product_category_id}`,
     },
+    {
+      label: "Serial Number:",
+      children: serial_number || <Tag color="red">N/A</Tag>,
+    },
+    {
+      label: "Model Number:",
+      children: model_number || <Tag color="red">N/A</Tag>,
+    },
+
     {
       label: "Maintenance Inverval in Month:",
       children: maintenance_interval_in_month || <Tag color="red">N/A</Tag>,

@@ -40,7 +40,7 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
 
   const getProductItemConsumables = async () => {
     const { data: productItem } = await http.get(
-      `/api/productItems/${productId}/${productItemId}`
+      `/api/productItemConsumables/${productItemId}`
     );
     const { data: locations } = await http.get(`/api/locations`);
     const { data: warehouses } = await http.get(`/api/warehouses`);
@@ -86,12 +86,32 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
     try {
       toggleFormUpdateConsumableOpen();
       setIsContentLoading(true);
-      await http.put(`/api/productItemConsumables/${productItem.id}`, {
+      await http.put(`/api/productItemConsumables/${productItemId}`, {
         ...formData,
         status_id: 1,
       });
+
+      const { data: stockLedgerItems } = await http.get(
+        `/api/inventories/${productId}/${productItemId}`
+      );
+
+      const inventoryTotalQty = stockLedgerItems.reduce((acc, item) => {
+        if (item.movement_type == "Increment") {
+          acc += item.quantity;
+        } else if (item.movement_type == "Decrement") {
+          acc -= item.quantity;
+        }
+
+        return acc;
+      }, 0);
+
+      await http.put(`/api/products/${productId}`, {
+        available_qty: inventoryTotalQty,
+      });
+
       await getProductItemConsumables();
     } catch (error) {
+      console.log(error);
       setError(error);
     } finally {
       setIsContentLoading(false);

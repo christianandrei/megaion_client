@@ -22,8 +22,8 @@ function Products() {
     const fetchNewProductItems = async () => {
       try {
         setIsContentLoading(true);
-        const { data } = await http.get("/api/productItems/new");
-        setNewProductItemCount(data.length);
+        //const { data } = await http.get("/api/productItems/new");
+        //setNewProductItemCount(data.length);
       } catch (error) {
         setError(error);
       } finally {

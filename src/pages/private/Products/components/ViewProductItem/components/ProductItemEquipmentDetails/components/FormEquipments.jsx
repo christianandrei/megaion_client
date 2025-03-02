@@ -63,6 +63,20 @@ const FormEquipment = ({ formData, supportingDetails, onSubmit }) => {
       onFinish={handleFormFinish}
     >
       <Form.Item
+        label="Serial Number"
+        name="serial_number"
+        rules={[{ required: true }]}
+      >
+        <Input placeholder="Unique" />
+      </Form.Item>
+      <Form.Item
+        label="Model Number"
+        name="model_number"
+        rules={[{ required: true }]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
         label="Maintenance Inverval "
         name="maintenance_interval_in_month"
         rules={[{ required: true }]}

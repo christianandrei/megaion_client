@@ -66,8 +66,117 @@ function PurchaseOrders() {
       await http.put(`/api/purchaseOrders/${purchaseOrder.id}`, {
         status_id: Number(newStatusId),
       });
+
+      if (Number(newStatusId) === 6) {
+        const { data } = await http.get(
+          `/api/purchaseOrders/${purchaseOrder.id}`
+        );
+
+        const { purchase_order_items: purchaseOrderItems } = data;
+        console.log({ purchaseOrderItems });
+        const consumableItems = purchaseOrderItems.filter(
+          ({ product }) => product.product_category_id == 1
+        );
+        const equipmentItems = purchaseOrderItems
+          .filter(({ product }) => product.product_category_id == 2)
+          .flatMap((equipment) =>
+            Array.from({ length: equipment.quantity }, () => {
+              return {
+                ...equipment,
+                quantity: 1,
+              };
+            })
+          );
+
+        const forInsertProductItemConsumables = consumableItems.map(
+          (consumableItem) => {
+            return {
+              product_id: consumableItem.product_id,
+              purchase_order_id: purchaseOrder.id,
+              batch_number: null,
+              expiry_date: null,
+              other_details: null,
+              barcode: null,
+              location_id: 1,
+              warehouse_id: 1,
+              status_id: 3,
+            };
+          }
+        );
+
+        const forInsertProductItemEquipment = equipmentItems.map(
+          (equipmentItem) => {
+            return {
+              product_id: equipmentItem.product_id,
+              purchase_order_id: purchaseOrder.id,
+              serial_number: null,
+              model_number: null,
+              maintenance_interval_in_month: 0,
+              other_details: null,
+              barcode: null,
+              location_id: 1,
+              warehouse_id: 1,
+              status_id: 3,
+            };
+          }
+        );
+
+        const { data: resConsumableItems } = await http.post(
+          "/api/productItemConsumablesNew",
+          forInsertProductItemConsumables
+        );
+        const { data: resEquipmentItems } = await http.post(
+          "/api/productItemEquipmentsNew",
+          forInsertProductItemEquipment
+        );
+
+        const forInsertInventoriesConsumables = resConsumableItems.map(
+          (resConsumableItems) => {
+            const { product_id, id } = resConsumableItems;
+            return {
+              product_id: product_id,
+              product_item_id: id,
+              quantity: purchaseOrderItems.find((pOI) => pOI.id === id)
+                .quantity,
+              movement_type: "Increment",
+              remarks: "Purchase Order",
+            };
+          }
+        );
+        const forInsertInventoriesEquipments = resEquipmentItems.map(
+          (resEquipmentItems) => {
+            const { product_id, id } = resEquipmentItems;
+            return {
+              product_id: product_id,
+              product_item_id: id,
+              quantity: 1,
+              movement_type: "Increment",
+              remarks: "Purchase Order",
+            };
+          }
+        );
+
+        const forInsertInventories = [
+          ...forInsertInventoriesConsumables,
+          ...forInsertInventoriesEquipments,
+        ];
+
+        const { data: resInventories } = await http.post(
+          "/api/inventoryItemsNew",
+          forInsertInventories
+        );
+
+        console.log({ forInsertProductItemConsumables });
+        console.log({ forInsertProductItemEquipment });
+        console.log({ resConsumableItems });
+        console.log({ resEquipmentItems });
+        console.log({ forInsertInventories });
+        console.log({ resInventories });
+      }
+
       await getPurchaseOrders();
     } catch (error) {
+      console.log(error);
       setError(error);
     } finally {
       setIsContentLoading(false);
@@ -85,7 +194,7 @@ function PurchaseOrders() {
         return (
           <div>
             <div>
-              <Text strong>{id}</Text>
+              <Text strong>MG{String(id).padStart(4, "0")}</Text>
             </div>
             <div>{supplier.name}</div>
             <div>
@@ -148,6 +257,7 @@ function PurchaseOrders() {
 
         if (record.status_id === 6) {
           menuItems.unshift({ key: 7, label: statuses[7] });
+          menuItems.unshift({ key: 5, label: statuses[5] });
           menuItems.pop();
           menuItems.pop();
         }

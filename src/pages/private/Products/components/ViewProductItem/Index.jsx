@@ -14,18 +14,24 @@ function ViewProductItem() {
   const [isContentLoading, setIsContentLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const { productId, productItemId } = useParams();
+  const { productCategoryId, productItemId } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsContentLoading(true);
 
-        const { data: productItem } = await http.get(
-          `/api/productItems/${productId}/${productItemId}`
-        );
-
-        setProductItem(productItem);
+        if (productCategoryId == 1) {
+          const { data: productItem } = await http.get(
+            `/api/productItemConsumables/${productItemId}`
+          );
+          setProductItem(productItem);
+        } else if (productCategoryId == 2) {
+          const { data: productItem } = await http.get(
+            `/api/productItemEquipments/${productItemId}`
+          );
+          setProductItem(productItem);
+        }
       } catch (error) {
         setError(error);
       } finally {
@@ -60,13 +66,13 @@ function ViewProductItem() {
       <Col span={12}>
         {productItem.product.product_category_id === 1 ? (
           <ProductItemConsumableDetails
-            productId={productId}
-            productItemId={productItemId}
+            productId={productItem.product_id}
+            productItemId={productItem.id}
           />
         ) : (
           <ProductItemEquipmentDetails
-            productId={productId}
-            productItemId={productItemId}
+            productId={productItem.product_id}
+            productItemId={productItem.id}
           />
         )}
       </Col>

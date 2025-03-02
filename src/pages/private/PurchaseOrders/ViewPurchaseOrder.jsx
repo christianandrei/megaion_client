@@ -37,7 +37,7 @@ function CreatePurchaseOrder() {
   const [error, setError] = useState(null);
 
   const { purchaseOrderId } = useParams();
-  const { statuses } = useDataStore();
+  const { statuses, productUnits } = useDataStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,8 +79,9 @@ function CreatePurchaseOrder() {
     },
     {
       title: "Unit",
-      dataIndex: "product_unit",
+      dataIndex: "product_unit_id",
       width: 100,
+      render: (text) => productUnits[text],
     },
     {
       title: "Quantity",

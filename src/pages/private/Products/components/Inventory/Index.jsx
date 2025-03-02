@@ -50,26 +50,40 @@ function Inventory({ newProductItemCount }) {
         const { data: productItemEquipments } = await http.get(
           "/api/productItemEquipments"
         );
+        const { data: inventories } = await http.get("/api/inventories");
+
         const productItems = [
           ...productItemConsumables,
           ...productItemEquipments,
-        ].map((item) => {
-          const sumOfIncrements = computeQuantitySum(
-            item.inventoryMovements,
-            "Increment"
-          );
-          const sumOfDecrements = computeQuantitySum(
-            item.inventoryMovements,
-            "Decrement"
-          );
+        ]
+          .map((item) => {
+            const { product_id, id } = item;
+            return {
+              ...item,
+              stockLedger: inventories.filter(
+                (inventory) =>
+                  inventory.product_id === product_id &&
+                  inventory.product_item_id === id
+              ),
+            };
+          })
+          .map((item) => {
+            const sumOfIncrements = computeQuantitySum(
+              item.stockLedger,
+              "Increment"
+            );
+            const sumOfDecrements = computeQuantitySum(
+              item.stockLedger,
+              "Decrement"
+            );
 
-          return {
-            newId: `${item.product_id}-${item.id}`,
-            product_name: item.product.name,
-            quantity: sumOfIncrements - sumOfDecrements,
-            ...item,
-          };
-        });
+            return {
+              newId: `${item.product_id}-${item.id}`,
+              product_name: item.product.name,
+              quantity: sumOfIncrements - sumOfDecrements,
+              ...item,
+            };
+          });
 
         setProductItems(productItems);
       } catch (error) {
@@ -162,9 +176,9 @@ function Inventory({ newProductItemCount }) {
       title: "Action",
       width: 50,
       render: (_, record) => {
-        const { product_id, id } = record;
+        const { product, id } = record;
         return (
-          <Link to={`/productItems/${product_id}/${id}`}>
+          <Link to={`/productItems/${product.product_category_id}/${id}`}>
             <Button type="primary">View</Button>
           </Link>
         );

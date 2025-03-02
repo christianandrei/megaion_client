@@ -55,6 +55,25 @@ function StockLedger({ productId, productItemId }) {
         product_id: Number(productId),
         product_item_id: Number(productItemId),
       });
+
+      const { data: stockLedger } = await http.get(
+        `/api/inventories/${productId}/${productItemId}`
+      );
+
+      const inventoryTotalQty = stockLedger.reduce((acc, item) => {
+        if (item.movement_type == "Increment") {
+          acc += item.quantity;
+        } else if (item.movement_type == "Decrement") {
+          acc -= item.quantity;
+        }
+
+        return acc;
+      }, 0);
+
+      await http.put(`/api/products/${productId}`, {
+        available_qty: inventoryTotalQty,
+      });
+
       await getStockLedgerItems();
     } catch (error) {
       setError(error);

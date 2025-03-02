@@ -38,7 +38,7 @@ function App() {
     {
       title: "View Product Item",
       subTitle: "view product item full details",
-      path: "/productItems/:productId/:productItemId",
+      path: "/productItems/:productCategoryId/:productItemId",
       element: <ViewProductItem />,
       isWithBackButton: true,
     },
@@ -90,6 +90,12 @@ function App() {
       subTitle: "warehouse management",
       path: "/warehouses",
       element: <Warehouses />,
+    },
+    {
+      title: "Ecommerce",
+      subTitle: "place your order here",
+      path: "/ecommerce",
+      element: <Ecommerce />,
     },
   ];
 

@@ -209,11 +209,23 @@ function PurchaseOrders() {
         }
 
         if (record.status_id === 5) {
+          menuItems.unshift({ key: 10, label: statuses[10] });
+        }
+
+        if (record.status_id === 10) {
           menuItems.unshift({ key: 6, label: statuses[6] });
+          menuItems.pop();
+          menuItems.pop();
         }
 
         if (record.status_id === 6) {
           menuItems.unshift({ key: 7, label: statuses[7] });
+          menuItems.pop();
+          menuItems.pop();
+        }
+
+        if (record.status_id === 7) {
+          menuItems.unshift({ key: 8, label: statuses[8] });
           menuItems.pop();
           menuItems.pop();
         }
@@ -255,6 +267,7 @@ function PurchaseOrders() {
   ];
 
   const pendingPOs = purchaseOrders.filter((po) => po.status_id === 4);
+  const processingPOs = purchaseOrders.filter((po) => po.status_id === 10);
   const approvedPOs = purchaseOrders.filter((po) => po.status_id === 5);
   const fulfilledPOs = purchaseOrders.filter((po) => po.status_id === 6);
   const cancelledPos = purchaseOrders.filter((po) => po.status_id === 8);
@@ -286,6 +299,20 @@ function PurchaseOrders() {
       ),
       children: (
         <Table columns={tableColumns} dataSource={approvedPOs} rowKey="id" />
+      ),
+    },
+    {
+      key: "22",
+      label: (
+        <>
+          Processing{" "}
+          {processingPOs.length > 0 && (
+            <Badge count={processingPOs.length} color="green" />
+          )}
+        </>
+      ),
+      children: (
+        <Table columns={tableColumns} dataSource={processingPOs} rowKey="id" />
       ),
     },
     {

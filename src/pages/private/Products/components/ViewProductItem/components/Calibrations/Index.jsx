@@ -22,7 +22,9 @@ function Calibrations({ productItemId }) {
   const [error, setError] = useState(null);
 
   const getCalibrations = async () => {
-    const { data } = await http.get("/api/productRecordCalibration");
+    const { data } = await http.get(
+      `/api/productRecordCalibration/search/${productItemId}`
+    );
     setCalibrations(data);
   };
 

@@ -20,7 +20,9 @@ function Claims({ productItemId }) {
   const [error, setError] = useState(null);
 
   const getClaims = async () => {
-    const { data } = await http.get("/api/productWarrantyClaims");
+    const { data } = await http.get(
+      `/api/productWarrantyClaims/search/${productItemId}`
+    );
     setClaims(data);
   };
 

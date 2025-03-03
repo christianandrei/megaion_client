@@ -23,7 +23,10 @@ function Maintenances({ productItemId }) {
   const [error, setError] = useState(null);
 
   const getMaintenances = async () => {
-    const { data } = await http.get("/api/productRecordMaintenance");
+    const { data } = await http.get(
+      `/api/productRecordMaintenance/search/${productItemId}`
+    );
+    console.log(data);
     setMaintenances(data);
   };
 

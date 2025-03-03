@@ -5,7 +5,7 @@ import PublicRoutes from "./components/PublicRoutes";
 import ProtectedRoutes from "./components/ProtectedRoutes.jsx";
 import RoleRoutes from "./components/RoleRoutes.jsx";
 
-import Login from "./pages/public/Login";
+import Login from "./pages/public/Login/Index.jsx";
 
 import Layout from "./layout/Index.jsx";
 import PageTitleProvider from "./components/common/PageTitleProvider";

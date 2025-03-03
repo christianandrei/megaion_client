@@ -23,6 +23,8 @@ import useAppStore from "../../store/AppStore";
 
 import http from "../../services/httpService";
 
+import Notifications from "../../components/Notifications";
+
 function Header() {
   const {
     token: { colorBgContainer },
@@ -81,11 +83,7 @@ function Header() {
             />
           </Col>
           <Col>
-            <Button type="text" style={{ width: 64, height: 64 }}>
-              <Badge count={5} size="small">
-                <BellOutlined style={{ fontSize: 16 }} />
-              </Badge>
-            </Button>
+            <Notifications />
             <Dropdown menu={{ items: menuItems }} placement="bottomLeft">
               <Button type="text" style={{ height: 64 }}>
                 <Avatar

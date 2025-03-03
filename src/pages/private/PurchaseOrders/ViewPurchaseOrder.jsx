@@ -64,8 +64,12 @@ function CreatePurchaseOrder() {
     return <ErrorContent />;
   }
 
-  if (!purchaseOrder) {
+  if (isContentLoading) {
     return <Skeleton />;
+  }
+
+  if (!purchaseOrder) {
+    return <Empty />;
   }
 
   const tableColumns = [
@@ -122,69 +126,82 @@ function CreatePurchaseOrder() {
     statusColor = "red";
   }
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <>
-      <Row>
-        <Col span={16}>
-          <Row type="flex" justify="space-between" style={{ marginBottom: 16 }}>
-            <Col>
-              <Title level={5} style={{ margin: 0 }}>
-                Purchase Order Number: #{purchaseOrder.id}
-              </Title>
-            </Col>
-            <Col>
-              <Tag color={statusColor}>{statuses[status_id]}</Tag>
-            </Col>
-          </Row>
-          {supplier && (
-            <div style={{ marginBottom: 16 }}>
-              <Title level={5} style={{ marginBottom: 0 }}>
-                {supplier.name}
-              </Title>
-              <div>
-                <Text type="secondary">{supplier.address}</Text>
+      <Button onClick={handlePrint} type="primary" style={{ marginBottom: 16 }}>
+        Print
+      </Button>
+      <div id="printArea">
+        <Row>
+          <Col span={16}>
+            <Row
+              type="flex"
+              justify="space-between"
+              style={{ marginBottom: 16 }}
+            >
+              <Col>
+                <Title level={5} style={{ margin: 0 }}>
+                  Purchase Order Number: #{purchaseOrder.id}
+                </Title>
+              </Col>
+              <Col>
+                <Tag color={statusColor}>{statuses[status_id]}</Tag>
+              </Col>
+            </Row>
+            {supplier && (
+              <div style={{ marginBottom: 16 }}>
+                <Title level={5} style={{ marginBottom: 0 }}>
+                  {supplier.name}
+                </Title>
+                <div>
+                  <Text type="secondary">{supplier.address}</Text>
+                </div>
+                <div>
+                  <Text type="secondary">{supplier.email}</Text>
+                </div>
+                <div>
+                  <Text type="secondary">{supplier.phone}</Text>
+                </div>
               </div>
-              <div>
-                <Text type="secondary">{supplier.email}</Text>
-              </div>
-              <div>
-                <Text type="secondary">{supplier.phone}</Text>
-              </div>
-            </div>
-          )}
-          <Table
-            columns={tableColumns}
-            dataSource={purchase_order_items}
-            rowKey="product_id"
-            pagination={false}
-          />
-          <Row type="flex" justify="space-between" style={{ marginTop: 16 }}>
-            <Col>
-              <Space>
-                <span>Notes:</span>
-                <span>{notes}</span>
-              </Space>
-            </Col>
-            <Col>
-              <Descriptions
-                bordered
-                column={1}
-                items={[
-                  {
-                    label: "Subtotal:",
-                    children: formatWithComma(subtotal_amount),
-                  },
-                  {
-                    label: "Total:",
-                    children: formatWithComma(total_amount),
-                  },
-                ]}
-                style={{ marginBottom: 16 }}
-              />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+            )}
+            <Table
+              columns={tableColumns}
+              dataSource={purchase_order_items}
+              rowKey="product_id"
+              pagination={false}
+            />
+            <Row type="flex" justify="space-between" style={{ marginTop: 16 }}>
+              <Col>
+                <Space>
+                  <span>Notes:</span>
+                  <span>{notes}</span>
+                </Space>
+              </Col>
+              <Col>
+                <Descriptions
+                  bordered
+                  column={1}
+                  items={[
+                    {
+                      label: "Subtotal:",
+                      children: formatWithComma(subtotal_amount),
+                    },
+                    {
+                      label: "Total:",
+                      children: formatWithComma(total_amount),
+                    },
+                  ]}
+                  style={{ marginBottom: 16 }}
+                />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </div>
     </>
   );
 }

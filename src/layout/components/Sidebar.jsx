@@ -54,11 +54,11 @@ function Sidebar() {
       icon: <ShoppingOutlined />,
       label: <Link to="/orders">Orders</Link>,
     },
-    {
-      key: "/reports",
-      icon: <PieChartOutlined />,
-      label: <Link to="/reports">Reports</Link>,
-    },
+    // {
+    //   key: "/reports",
+    //   icon: <PieChartOutlined />,
+    //   label: <Link to="/reports">Reports</Link>,
+    // },
     {
       key: "/users",
       icon: <UserOutlined />,

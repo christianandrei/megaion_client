@@ -11,6 +11,7 @@ import {
   Empty,
   Tag,
   Divider,
+  Typography,
 } from "antd";
 import {
   ShoppingCartOutlined,
@@ -21,6 +22,10 @@ import {
 import ErrorContent from "../../../components/common/ErrorContent";
 
 import http from "../../../services/httpService";
+
+import { formatWithComma } from "../../../helpers/numbers";
+
+const { Paragraph } = Typography;
 
 function ProductCard({ product, addToCart }) {
   let actions = [];
@@ -41,23 +46,43 @@ function ProductCard({ product, addToCart }) {
   }
 
   return (
-    <Card
-      hoverable
-      cover={<img alt={product.name} src={product.img_url} />}
-      actions={actions}
-    >
-      <Card.Meta
-        title={product.name}
-        description={
-          <>
-            <p>{product.description}</p>
-
-            <div>PHP {product.selling_price.toFixed(2)}</div>
-            <div>Available: {product.available_qty}</div>
-          </>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <Card
+        hoverable
+        cover={
+          <div style={{ height: "200px", overflow: "hidden" }}>
+            <img
+              alt={product.name}
+              src={product.img_url}
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          </div>
         }
-      />
-    </Card>
+        actions={actions}
+        style={{ flex: 1, display: "flex", flexDirection: "column" }}
+      >
+        <Card.Meta
+          title={product.name}
+          description={
+            <>
+              <Paragraph
+                ellipsis={{
+                  rows: 3,
+                  expandable: true,
+                  symbol: "see more",
+                }}
+                style={{ minHeight: 80 }}
+              >
+                {product.description}
+              </Paragraph>
+
+              <div>PHP {formatWithComma(product.selling_price.toFixed(2))}</div>
+              <div>Available: {product.available_qty}</div>
+            </>
+          }
+        />
+      </Card>
+    </div>
   );
 }
 
@@ -219,18 +244,21 @@ function ProductListing() {
                 >
                   <List.Item.Meta
                     title={item.name}
-                    description={`PHP ${item.selling_price.toFixed(2)} x ${
-                      item.quantity
-                    }`}
+                    description={`PHP ${formatWithComma(
+                      item.selling_price.toFixed(2)
+                    )} x ${item.quantity}`}
                   />
                   <div>
-                    PHP {(item.selling_price * item.quantity).toFixed(2)}
+                    PHP{" "}
+                    {formatWithComma(
+                      (item.selling_price * item.quantity).toFixed(2)
+                    )}
                   </div>
                 </List.Item>
               )}
             />
             <div style={{ marginTop: 20, fontWeight: "bold" }}>
-              Total: PHP {totalPrice.toFixed(2)}
+              Total: PHP {formatWithComma(totalPrice.toFixed(2))}
             </div>
 
             <Divider />

@@ -214,7 +214,6 @@ function PurchaseOrders() {
 
         if (record.status_id === 6) {
           menuItems.unshift({ key: 7, label: statuses[7] });
-          menuItems.unshift({ key: 5, label: statuses[5] });
           menuItems.pop();
           menuItems.pop();
         }

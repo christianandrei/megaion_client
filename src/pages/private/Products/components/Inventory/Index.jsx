@@ -100,6 +100,8 @@ function Inventory({ newProductItemCount }) {
     return <ErrorContent />;
   }
 
+  console.log(productItems);
+
   const tableColumns = [
     {
       title: "",
@@ -138,12 +140,23 @@ function Inventory({ newProductItemCount }) {
       ...getColumnSearchProps("barcode", "Search Barcode Here"),
       width: 200,
     },
-    { title: "Batch Number", dataIndex: "batch_number", width: 150 },
     {
-      title: "Expired In",
-      dataIndex: "batch_number",
-      render: () => "6 days",
-      width: 150,
+      title: "Category",
+      width: 100,
+      filters: [
+        {
+          text: "Consumable",
+          value: 1,
+        },
+        {
+          text: "Equipment",
+          value: 2,
+        },
+      ],
+      onFilter: (value, record) => record.product.product_category_id === value,
+      render: (_, record) => {
+        return record.product.category.name;
+      },
     },
     {
       title: "Status",

@@ -8,7 +8,7 @@ const RoleRoutes = (props) => {
   return props.userType === userType ? (
     <Outlet />
   ) : (
-    <Navigate replace to="/404" />
+    <Navigate replace to="/405" />
   );
 };
 

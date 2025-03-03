@@ -101,8 +101,8 @@ function Sidebar() {
     },
     {
       key: "/customerOrders",
-      icon: <UnorderedListOutlined />,
-      label: <Link to="/ecommerce">Customer Orders</Link>,
+      icon: <ShoppingOutlined />,
+      label: <Link to="/customerOrders">My Orders</Link>,
     },
   ];
 
@@ -120,6 +120,7 @@ function Sidebar() {
       "/companies",
       "/locations",
       "/warehouses",
+      "/customerOrders",
     ],
     Customer: ["/ecommerce", "/customerOrders"],
     Sales: ["/dashboard", "/orders"],

@@ -72,14 +72,6 @@ const FormProduct = ({ formData, supportingData, onSubmit }) => {
       "Reference to purchase order means that the product will create a product item and it will reference to a purchase order. This is useful when you need to split the same items quantity, for example, due to expiration dates.",
   };
 
-  const normFile = (e) => {
-    console.log("Upload event:", e);
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e?.fileList;
-  };
-
   return (
     <Form
       {...layout}

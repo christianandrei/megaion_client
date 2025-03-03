@@ -69,7 +69,6 @@ function Orders() {
       });
       await getOrders();
     } catch (error) {
-      console.log(error);
       setError(error);
     } finally {
       setIsContentLoading(false);

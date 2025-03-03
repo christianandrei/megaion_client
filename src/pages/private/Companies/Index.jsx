@@ -13,6 +13,8 @@ function Companies() {
   const [companies, setCompanies] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState(null);
 
+  const [users, setUsers] = useState([]);
+
   const [isFormCreateCompanyOpen, setIsFormCreateCompanyOpen] = useState(false);
   const [isFormUpdateCompanyOpen, setIsFormUpdateCompanyOpen] = useState(false);
 
@@ -28,6 +30,8 @@ function Companies() {
     const fetchCompanies = async () => {
       try {
         setIsContentLoading(true);
+        const { data: users } = await http.get("/api/users");
+        setUsers(users);
         await getCompanies();
       } catch (error) {
         setError(error);
@@ -55,7 +59,13 @@ function Companies() {
     try {
       toggleFormCreateCompanyOpen();
       setIsContentLoading(true);
-      await http.post("/api/companies", { ...formData, status_id: 1 });
+      const users = [...formData.users];
+      delete formData.users;
+      const { data: company } = await http.post("/api/companies", {
+        ...formData,
+        status_id: 1,
+      });
+      await http.post("/api/companyMembers", { users, company_id: company.id });
       await getCompanies();
     } catch (error) {
       setError(error);
@@ -68,7 +78,13 @@ function Companies() {
     try {
       toggleFormUpdateCompanyOpen();
       setIsContentLoading(true);
+      const users = [...formData.users];
+      delete formData.users;
       await http.put(`/api/companies/${selectedCompany.id}`, formData);
+      await http.put(`/api/companyMembers/${selectedCompany.id}`, {
+        users,
+        company_id: selectedCompany.id,
+      });
       await getCompanies();
     } catch (error) {
       setError(error);
@@ -170,7 +186,10 @@ function Companies() {
         width={600}
         onClose={toggleFormCreateCompanyOpen}
       >
-        <FormCompany onSubmit={handleFormCreateCompanySubmit} />
+        <FormCompany
+          supportingDetails={{ users }}
+          onSubmit={handleFormCreateCompanySubmit}
+        />
       </Drawer>
 
       <Drawer
@@ -182,6 +201,7 @@ function Companies() {
       >
         <FormCompany
           formData={selectedCompany}
+          supportingDetails={{ users }}
           onSubmit={handleFormUpdateCompanySubmit}
         />
       </Drawer>

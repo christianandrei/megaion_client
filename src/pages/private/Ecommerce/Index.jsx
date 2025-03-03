@@ -79,7 +79,6 @@ function ProductListing() {
         const { data } = await http.get("/api/products");
         setProducts(data);
       } catch (error) {
-        console.log(error);
         setError(error);
       } finally {
         setIsContentLoading(false);
@@ -90,7 +89,6 @@ function ProductListing() {
   }, []);
 
   if (error) {
-    console.log(error);
     return <ErrorContent />;
   }
 

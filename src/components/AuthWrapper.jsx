@@ -24,11 +24,10 @@ const AuthWrapper = () => {
           id: user_id,
           name: name,
           roles: roles,
-          type: "Admin",
+          type: "All",
           // status: data.status
         });
       } catch (error) {
-        console.log(error);
         if (error.response.status === 401) {
           //window.location = "/login";
           setIsUnauthorize(true);

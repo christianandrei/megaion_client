@@ -32,9 +32,17 @@ import Inventory from "./pages/private/Inventory/Index.jsx";
 import Ecommerce from "./pages/private/Ecommerce/Index";
 
 import ViewOrder from "./pages/private/Orders/ViewOrder/Index.jsx";
+import CustomerOrder from "./pages/private/CustomerOrder/Index.jsx";
+import ViewCustomerOrder from "./pages/private/CustomerOrder/ViewOrder/Index.jsx";
 
 function App() {
-  const adminRoutes = [
+  const routes = [
+    {
+      title: "My Orders",
+      subTitle: "view your orders here",
+      path: "/customerOrders",
+      element: <CustomerOrder />,
+    },
     {
       title: "Purchase Orders",
       subTitle: "purchase order management",
@@ -46,6 +54,14 @@ function App() {
       subTitle: "view order full details",
       path: "/orders/:orderId",
       element: <ViewOrder />,
+      isWithBackButton: true,
+    },
+    {
+      title: "View Order",
+      subTitle: "view order full details",
+      path: "/customerOrders/:orderId",
+      element: <ViewCustomerOrder />,
+      isWithBackButton: true,
     },
     {
       title: "View Product Item",
@@ -133,16 +149,21 @@ function App() {
       path: "/ecommerce",
       element: <Ecommerce />,
     },
-  ];
-
-  const customerRoutes = [
     {
       title: "Ecommerce",
       subTitle: "place your order here",
       path: "/ecommerce",
       element: <Ecommerce />,
     },
+    {
+      title: "My Orders",
+      subTitle: "view your orders here",
+      path: "/customerOrders",
+      element: <CustomerOrder />,
+    },
   ];
+
+  const customerRoutes = [];
 
   return (
     <Routes>
@@ -165,8 +186,8 @@ function App() {
                 </PageTitleProvider>
               }
             />
-            <Route path="/" element={<RoleRoutes userType="Admin" />}>
-              {adminRoutes.map((route) => (
+            <Route path="/" element={<RoleRoutes userType="All" />}>
+              {routes.map((route) => (
                 <Route
                   key={route.path}
                   path={route.path}
@@ -178,7 +199,7 @@ function App() {
                 />
               ))}
             </Route>
-            <Route path="/" element={<RoleRoutes userType="Customer" />}>
+            {/* <Route path="/" element={<RoleRoutes userType="Customer" />}>
               {customerRoutes.map((route) => (
                 <Route
                   key={route.path}
@@ -190,7 +211,7 @@ function App() {
                   }
                 />
               ))}
-            </Route>
+            </Route> */}
           </Route>
         </Route>
       </Route>

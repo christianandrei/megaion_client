@@ -134,7 +134,6 @@ function PurchaseOrders() {
 
       await getPurchaseOrders();
     } catch (error) {
-      console.log(error);
       setError(error);
     } finally {
       setIsContentLoading(false);

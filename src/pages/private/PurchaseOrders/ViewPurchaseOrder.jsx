@@ -51,7 +51,6 @@ function CreatePurchaseOrder() {
         setProducts(products);
         setPurcaseOrder(purchaseOrder);
       } catch (error) {
-        console.log(error);
         setError(error);
       } finally {
         setIsContentLoading(false);

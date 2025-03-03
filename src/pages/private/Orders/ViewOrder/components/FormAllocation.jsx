@@ -78,7 +78,6 @@ function FormAllocation({ supportingData, onSubmit }) {
 
         setItems(productItems);
       } catch (error) {
-        console.log(error);
         setError(error);
       } finally {
         setIsContentLoading(false);

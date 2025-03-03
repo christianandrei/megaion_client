@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import { Form, Input, Button, Select, Divider } from "antd";
 
-const FormCompany = ({ formData, onSubmit }) => {
+const FormCompany = ({ formData, supportingDetails, onSubmit }) => {
   const [formCompanyInstance] = Form.useForm();
 
   useEffect(() => {
     if (formData) {
-      formCompanyInstance.setFieldsValue(formData);
+      formCompanyInstance.setFieldsValue({
+        ...formData,
+        users: formData.company_members.map((item) => item.user_id),
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
@@ -26,6 +29,8 @@ const FormCompany = ({ formData, onSubmit }) => {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
+
+  const { users } = supportingDetails;
 
   return (
     <Form
@@ -66,7 +71,11 @@ const FormCompany = ({ formData, onSubmit }) => {
       >
         <Input />
       </Form.Item>
-      <Form.Item label="Physical Address" name="physical_address">
+      <Form.Item
+        label="Physical Address"
+        name="physical_address"
+        rules={[{ required: true }]}
+      >
         <Input />
       </Form.Item>
       <Form.Item label="Business Type" name="business_type">
@@ -90,13 +99,21 @@ const FormCompany = ({ formData, onSubmit }) => {
       <Form.Item label="Industry" name="industry">
         <Input />
       </Form.Item>
-      <Form.Item label="Primary Contact Name" name="primary_contact_name">
+      <Form.Item
+        label="Primary Contact Name"
+        name="primary_contact_name"
+        rules={[{ required: true }]}
+      >
         <Input />
       </Form.Item>
       <Form.Item label="Primary Contact Title" name="primary_contact_title">
         <Input />
       </Form.Item>
-      <Form.Item label="Primary Contact Number" name="primary_contact_number">
+      <Form.Item
+        label="Primary Contact Number"
+        name="primary_contact_number"
+        rules={[{ required: true }]}
+      >
         <Input />
       </Form.Item>
       <Form.Item label="Secondary Contact Name" name="secondary_contact_name">
@@ -136,6 +153,16 @@ const FormCompany = ({ formData, onSubmit }) => {
               label: "Strategic Partner",
             },
           ]}
+        />
+      </Form.Item>
+      <Form.Item label="Users" name="users" rules={[{ required: true }]}>
+        <Select
+          mode="multiple"
+          allowClear
+          options={users.map((item) => ({
+            value: item.id,
+            label: item.name,
+          }))}
         />
       </Form.Item>
       <Divider />

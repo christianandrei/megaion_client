@@ -69,8 +69,6 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
   }, []);
 
   if (error) {
-    console.log(error.response);
-    console.log(error.response.data);
     return <ErrorContent error={error?.response?.data?.message} />;
   }
 

@@ -56,7 +56,6 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
         setIsContentLoading(true);
         await getProductItemConsumables();
       } catch (error) {
-        console.log(error);
         setError(error);
       } finally {
         setIsContentLoading(false);
@@ -111,7 +110,6 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
 
       await getProductItemConsumables();
     } catch (error) {
-      console.log(error);
       setError(error);
     } finally {
       setIsContentLoading(false);

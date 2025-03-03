@@ -1,25 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
-  Spin,
   Row,
   Col,
-  Button,
-  Drawer,
   Table,
-  Modal,
-  Dropdown,
-  Select,
   Typography,
   Space,
   Descriptions,
-  Input,
   Empty,
   Skeleton,
   Tag,
   List,
 } from "antd";
-import { MoreOutlined } from "@ant-design/icons";
 
 import ErrorContent from "../../../../components/common/ErrorContent";
 
@@ -28,18 +20,13 @@ import { formatWithComma } from "../../../../helpers/numbers";
 
 import useDataStore from "../../../../store/DataStore";
 
-import FormAllocation from "./components/FormAllocation";
-
 const { Title, Text } = Typography;
 
 function ViewOrder() {
   const [order, setOrder] = useState(null);
-  const [selectedOrderItem, setSelectedOrderItem] = useState(null);
 
   const [isContentLoading, setIsContentLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const [isFormAllocationOpen, setIsFormAllocationOpen] = useState(false);
 
   const { orderId } = useParams();
   const { statuses } = useDataStore();
@@ -83,66 +70,6 @@ function ViewOrder() {
     return <Empty />;
   }
 
-  const toggleFormAllocationOpen = () => {
-    setIsFormAllocationOpen(!isFormAllocationOpen);
-  };
-
-  const handleFormAllocationSubmit = (formData) => {
-    toggleFormAllocationOpen();
-    const { forInsertOrderAllocation, forInsertInventory } = formData;
-
-    const newOrderItems = order.order_items.map((orderItem) => {
-      if (orderItem.id === selectedOrderItem.id) {
-        return {
-          ...orderItem,
-          orderItemAllocations: forInsertOrderAllocation,
-          forInsertInventory,
-        };
-      }
-      return orderItem;
-    });
-
-    order.order_items = newOrderItems;
-
-    setOrder(order);
-  };
-
-  function hasEmptyAllocation(order) {
-    return order
-      ? order.order_items.some((item) => item.orderItemAllocations.length === 0)
-      : true;
-  }
-
-  const handleProcess = async () => {
-    try {
-      setIsContentLoading(true);
-      let forInsertInventory = [];
-      let forOrderItemsAllocationInsert = [];
-
-      order.order_items.forEach((orderItem) => {
-        forInsertInventory = [
-          ...forInsertInventory,
-          ...orderItem.forInsertInventory,
-        ];
-        forOrderItemsAllocationInsert = [
-          ...forOrderItemsAllocationInsert,
-          ...orderItem.orderItemAllocations,
-        ];
-      });
-
-      await http.post("/api/saveOrderAllocation", {
-        order_id: order.id,
-        forInventoryInsert: forInsertInventory,
-        forOrderItemsAllocationInsert,
-      });
-      await getOrder();
-    } catch (error) {
-      setError(true);
-    } finally {
-      setIsContentLoading(false);
-    }
-  };
-
   const tableColumns = [
     {
       title: "Name",
@@ -169,34 +96,14 @@ function ViewOrder() {
       width: 100,
       render: (text) => formatWithComma(text),
     },
-    {
-      title: "Action",
-      width: 50,
-      render: (_, record) => {
-        return (
-          <Button
-            onClick={() => {
-              setSelectedOrderItem({ order, ...record });
-              toggleFormAllocationOpen();
-            }}
-          >
-            Allocate
-          </Button>
-        );
-      },
-    },
   ];
-
-  if (order.latest_status.status.id !== 9) {
-    tableColumns.pop();
-  }
 
   const { order_number, order_items, total_amount, latest_status } = order;
 
   const status_id = latest_status.status.id;
 
   let statusColor = "orange";
-  if (status_id === 11 && status_id === 12) {
+  if (status_id === 11 || status_id === 12) {
     statusColor = "purple";
   } else if (status_id === 8) {
     statusColor = "red";
@@ -231,7 +138,6 @@ function ViewOrder() {
             dataSource={order_items}
             rowKey="product_id"
             pagination={false}
-            defaultExpandAllRows
             expandable={{
               expandedRowRender: (record) => (
                 <>
@@ -280,35 +186,9 @@ function ViewOrder() {
               />
             </Col>
           </Row>
-
-          {order.latest_status.status.id === 9 && (
-            <div style={{ textAlign: "right" }}>
-              <Button
-                size="large"
-                type="primary"
-                disabled={hasEmptyAllocation(order)}
-                onClick={handleProcess}
-              >
-                Process
-              </Button>
-            </div>
-          )}
         </Col>
         <Col></Col>
       </Row>
-
-      <Drawer
-        title="Select Product"
-        open={isFormAllocationOpen}
-        destroyOnClose
-        width={600}
-        onClose={toggleFormAllocationOpen}
-      >
-        <FormAllocation
-          supportingData={{ selectedOrderItem }}
-          onSubmit={handleFormAllocationSubmit}
-        />
-      </Drawer>
     </>
   );
 }

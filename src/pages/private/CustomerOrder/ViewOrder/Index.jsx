@@ -126,10 +126,18 @@ function ViewOrder() {
 
           <div style={{ marginBottom: 16 }}>
             <Title level={5} style={{ marginBottom: 0 }}>
-              Company Name
+              {order?.user?.company_members[0]?.company.name || "-"}
             </Title>
             <div>
-              <Text type="secondary">Copmany Address</Text>
+              <Text type="secondary">
+                {order?.user?.company_members[0]?.company?.phone_number || ""}
+              </Text>
+            </div>
+            <div>
+              <Text type="secondary">
+                {order?.user?.company_members[0]?.company?.physical_address ||
+                  ""}
+              </Text>
             </div>
           </div>
 

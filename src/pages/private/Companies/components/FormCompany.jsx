@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Form, Input, Button, Select, Divider } from "antd";
+import { Form, Input, Button, Select, Divider, Alert } from "antd";
 
 const FormCompany = ({ formData, supportingDetails, onSubmit }) => {
   const [formCompanyInstance] = Form.useForm();
@@ -163,6 +163,17 @@ const FormCompany = ({ formData, supportingDetails, onSubmit }) => {
             value: item.id,
             label: item.name,
           }))}
+        />
+      </Form.Item>
+      <Form.Item
+        wrapperCol={{
+          offset: layout.labelCol.span,
+          span: layout.wrapperCol.span,
+        }}
+      >
+        <Alert
+          description="Each user can belong to only one company. The system will automatically check this."
+          showIcon
         />
       </Form.Item>
       <Divider />

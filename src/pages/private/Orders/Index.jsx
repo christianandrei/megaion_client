@@ -14,6 +14,7 @@ import {
   App,
 } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
 
 import ErrorContent from "../../../components/common/ErrorContent";
 
@@ -83,6 +84,21 @@ function Orders() {
       render: (_, record) => {
         return <div>{record.order_number}</div>;
       },
+      width: 200,
+    },
+    {
+      title: "Company",
+      dataIndex: "total_items",
+      render: (_, record) =>
+        record?.user?.company_members[0]?.company.name || "-",
+    },
+    {
+      title: "Order date",
+      dataIndex: "created_at",
+      render: (text) => {
+        return dayjs("2025-03-03").format("MMMM DD, YYYY");
+      },
+      width: 200,
     },
     {
       title: "Total Items",

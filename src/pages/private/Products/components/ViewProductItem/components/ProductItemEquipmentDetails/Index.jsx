@@ -130,7 +130,7 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
     model_number,
     serial_number,
   } = productItem;
-  const { product_group_id, product_category_id, name, img_url } = product;
+  const { group, category, name, img_url } = product;
 
   const descriptionItems = [
     {
@@ -152,11 +152,11 @@ function ProductItemEquipmentDetails({ productId, productItemId }) {
     },
     {
       label: "Product Group:",
-      children: `${product_group_id}`,
+      children: `${group.name}`,
     },
     {
       label: "Product Category:",
-      children: `${product_category_id}`,
+      children: `${category.name}`,
     },
     {
       label: "Serial Number:",

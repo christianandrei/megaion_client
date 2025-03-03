@@ -45,6 +45,8 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
     const { data: locations } = await http.get(`/api/locations`);
     const { data: warehouses } = await http.get(`/api/warehouses`);
 
+    console.log({ productItem });
+
     setProductItem(productItem);
     setLocations(locations);
     setWarehouses(warehouses);
@@ -126,7 +128,7 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
     location,
     warehouse,
   } = productItem;
-  const { product_group_id, product_category_id, name, img_url } = product;
+  const { group, category, name, img_url } = product;
 
   const descriptionItems = [
     {
@@ -148,11 +150,11 @@ function ProductItemConsumableDetails({ productId, productItemId }) {
     },
     {
       label: "Product Group:",
-      children: `${product_group_id}`,
+      children: `${group.name}`,
     },
     {
       label: "Product Category:",
-      children: `${product_category_id}`,
+      children: `${category.name}`,
     },
     {
       label: "Batch Number:",

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Spin, Button, Table, Dropdown, Tag, App } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
 
 import ErrorContent from "../../../components/common/ErrorContent";
 
@@ -54,6 +55,14 @@ function CustomerOrder() {
       render: (_, record) => {
         return <div>{record.order_number}</div>;
       },
+    },
+    {
+      title: "Order date",
+      dataIndex: "created_at",
+      render: (text) => {
+        return dayjs("2025-03-03").format("MMMM DD, YYYY");
+      },
+      width: 200,
     },
     {
       title: "Total Items",

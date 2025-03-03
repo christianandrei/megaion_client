@@ -44,23 +44,23 @@ function ViewOrder() {
   const { orderId } = useParams();
   const { statuses } = useDataStore();
 
+  const getOrder = async () => {
+    const { data: order } = await http.get(`/api/orders/${orderId}`);
+
+    const newOrderItems = order.order_items.map((orderItem) => ({
+      ...orderItem,
+      orderItemAllocations: orderItem.order_items_allocation,
+    }));
+
+    order.order_items = newOrderItems;
+    setOrder(order);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsContentLoading(true);
-        const { data: order } = await http.get(`/api/orders/${orderId}`);
-
-        console.log(order);
-
-        const newOrderItems = order.order_items.map((orderItem) => ({
-          ...orderItem,
-          orderItemAllocations: orderItem.order_items_allocation,
-        }));
-
-        order.order_items = newOrderItems;
-        // order.latest_status.status.id = 10;
-
-        setOrder(order);
+        await getOrder();
       } catch (error) {
         console.log(error);
         setError(error);
@@ -142,6 +142,7 @@ function ViewOrder() {
         forInventoryInsert: forInsertInventory,
         forOrderItemsAllocationInsert,
       });
+      await getOrder();
     } catch (error) {
       console.log(error);
       setError(true);
@@ -238,6 +239,7 @@ function ViewOrder() {
             dataSource={order_items}
             rowKey="product_id"
             pagination={false}
+            defaultExpandAllRows
             expandable={{
               expandedRowRender: (record) => (
                 <>

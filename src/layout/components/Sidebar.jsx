@@ -24,11 +24,16 @@ import megaionLogoSmall from "../../assets/images/megaion-small.png";
 
 function Sidebar() {
   const { isSidebarOpen } = useAppStore();
-  const { type: userType } = useUserStore();
+  const { roles: userRoles } = useUserStore();
 
   const location = useLocation();
 
-  const adminMenuItems = [
+  const allMenu = [
+    {
+      key: "/dashboard",
+      icon: <DashboardOutlined />,
+      label: <Link to="/dashboard">Dashboard</Link>,
+    },
     {
       key: "/products",
       icon: <UnorderedListOutlined />,
@@ -89,49 +94,55 @@ function Sidebar() {
       label: <Link to="/warehouses">Warehouses</Link>,
       group: "Others",
     },
-  ];
-
-  const customerMenuItems = [
     {
       key: "/ecommerce",
       icon: <UnorderedListOutlined />,
       label: <Link to="/ecommerce">Ecommerce</Link>,
     },
     {
-      key: "/orders",
-      icon: <ShoppingOutlined />,
-      label: <Link to="/orders">Orders</Link>,
+      key: "/customerOrders",
+      icon: <UnorderedListOutlined />,
+      label: <Link to="/ecommerce">Customer Orders</Link>,
     },
   ];
 
-  let menuItems = [
-    {
-      key: "/dashboard",
-      icon: <DashboardOutlined />,
-      label: <Link to="/dashboard">Dashboard</Link>,
-    },
-  ];
+  const userRoleMenu = {
+    Admin: [
+      "/dashboard",
+      "/products",
+      "/inventory",
+      "/purchaseOrders",
+      "/orders",
+      "/reports",
+      "/users",
+      "/productGroups",
+      "/suppliers",
+      "/companies",
+      "/locations",
+      "/warehouses",
+    ],
+    Customer: ["/ecommerce", "/customerOrders"],
+    Sales: ["/dashboard", "/orders"],
+    Procurement: ["/dashboard", "/purchaseOrders"],
+    "Inventory staff": ["/dashboard", "/inventory"],
+    "Warehouse staff": ["/dashboard", "/purchaseOrders"],
+    "Logistic manager": ["/dashboard", "/orders"],
+  };
 
-  if (userType === "Admin") {
-    const otherMenuChildren = adminMenuItems.filter(
-      (item) => item.group === "Others"
-    );
-    const newAdminMenuItems = adminMenuItems.filter(
-      (item) => item.group !== "Others"
-    );
-    menuItems = [
-      ...menuItems,
-      ...newAdminMenuItems,
-      {
-        key: "/Others",
-        icon: <MenuOutlined />,
-        label: "Others",
-        children: otherMenuChildren,
-      },
-    ];
-  } else if (userType === "Customer") {
-    menuItems = [...menuItems, ...customerMenuItems];
-  }
+  const getMenuForRoles = (menu, userRoleMenu, roles) => {
+    const assignedMenu = [];
+    roles.forEach((role) => {
+      userRoleMenu[role].forEach((menuKey) => {
+        if (!assignedMenu.find((item) => item.key === menuKey)) {
+          const menuItem = menu.find((item) => item.key === menuKey);
+          if (menuItem) assignedMenu.push(menuItem);
+        }
+      });
+    });
+    return assignedMenu;
+  };
+
+  const menuItems = getMenuForRoles(allMenu, userRoleMenu, userRoles);
 
   return (
     <Layout.Sider

@@ -25,6 +25,8 @@ import http from "../../services/httpService";
 
 import Notifications from "../../components/Notifications";
 
+import useUserStore from "../../store/UserStore";
+
 function Header() {
   const {
     token: { colorBgContainer },
@@ -33,6 +35,7 @@ function Header() {
   const [isLogoutLoadingVisible, setIsLogoutLoadingVisible] = useState(false);
 
   const { isSidebarOpen, toggleSidebar } = useAppStore();
+  const { name } = useUserStore();
 
   const logout = async () => {
     try {
@@ -93,7 +96,7 @@ function Header() {
                     backgroundColor: "#1677ff",
                   }}
                 />{" "}
-                Admin
+                {name}
               </Button>
             </Dropdown>
           </Col>

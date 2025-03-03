@@ -20,6 +20,8 @@ import "./style.css";
 import Piechart from "./Chart/Piechart";
 import Barchart from "./Chart/Barchart";
 
+import useUserStore from "../../../store/UserStore";
+
 const { Title } = Typography;
 
 function Dashboard() {
@@ -30,6 +32,8 @@ function Dashboard() {
 
   const [isContentLoading, setIsContentLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const { name } = useUserStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,13 +47,6 @@ function Dashboard() {
         const { data: categoryReport } = await http.get(
           "/api/report/getProductTotalsByCategory"
         );
-
-        console.log({
-          productReports,
-          orderReports,
-          amountPerUser,
-          categoryReport,
-        });
 
         setProductReports(productReports);
         setOrderReports(orderReports);
@@ -93,7 +90,7 @@ function Dashboard() {
     <div>
       <Row gutter={[16, 16]}>
         <Col span={12}>
-          <h1>Hello Admin!</h1>
+          <h1>Hello {name}!</h1>
           <div>
             <Card
               cover={

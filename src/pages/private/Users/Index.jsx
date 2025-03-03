@@ -42,7 +42,7 @@ function Users() {
       try {
         setIsContentLoading(true);
         const { data: roles } = await http.get("/api/roles");
-        setRoles(roles.filter((role) => role.id !== 1));
+        setRoles(roles);
         await getUsers();
       } catch (error) {
         setError(error);

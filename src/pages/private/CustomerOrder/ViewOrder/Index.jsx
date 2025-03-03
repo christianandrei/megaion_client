@@ -14,6 +14,7 @@ import {
 } from "antd";
 
 import ErrorContent from "../../../../components/common/ErrorContent";
+import OrderTracking from "../../../../components/common/OrderTracking";
 
 import http from "../../../../services/httpService";
 import { formatWithComma } from "../../../../helpers/numbers";
@@ -111,7 +112,7 @@ function ViewOrder() {
 
   return (
     <>
-      <Row>
+      <Row gutter={[16, 16]}>
         <Col span={16}>
           <Row type="flex" justify="space-between" style={{ marginBottom: 16 }}>
             <Col>
@@ -195,7 +196,11 @@ function ViewOrder() {
             </Col>
           </Row>
         </Col>
-        <Col></Col>
+        <Col span={8}>
+          <div style={{ width: "100%", paddingLeft: 50, color: "#eb2f96" }}>
+            <OrderTracking orderId={order.id} />
+          </div>
+        </Col>
       </Row>
     </>
   );

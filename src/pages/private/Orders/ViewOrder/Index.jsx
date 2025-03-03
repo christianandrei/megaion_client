@@ -18,8 +18,10 @@ import {
   Skeleton,
   Tag,
   List,
+  Card,
 } from "antd";
-import { MoreOutlined } from "@ant-design/icons";
+import { MoreOutlined, TruckOutlined } from "@ant-design/icons";
+import Barcode from "react-barcode";
 
 import ErrorContent from "../../../../components/common/ErrorContent";
 
@@ -27,8 +29,11 @@ import http from "../../../../services/httpService";
 import { formatWithComma } from "../../../../helpers/numbers";
 
 import useDataStore from "../../../../store/DataStore";
+import useUserStore from "../../../../store/UserStore";
 
 import FormAllocation from "./components/FormAllocation";
+
+import OrderTracking from "../../../../components/common/OrderTracking";
 
 const { Title, Text } = Typography;
 
@@ -43,6 +48,7 @@ function ViewOrder() {
 
   const { orderId } = useParams();
   const { statuses } = useDataStore();
+  const { roles } = useUserStore();
 
   const getOrder = async () => {
     const { data: order } = await http.get(`/api/orders/${orderId}`);
@@ -143,6 +149,17 @@ function ViewOrder() {
     }
   };
 
+  const handlePrint = () => {
+    const printContent = document.getElementById("barcode").innerHTML;
+    const printWindow = window.open("", "", "height=600,width=800");
+    printWindow.document.write("<html><head><title>Print</title>");
+    printWindow.document.write("</head><body >");
+    printWindow.document.write(printContent);
+    printWindow.document.write("</body></html>");
+    printWindow.document.close();
+    printWindow.print();
+  };
+
   const tableColumns = [
     {
       title: "Name",
@@ -169,7 +186,10 @@ function ViewOrder() {
       width: 100,
       render: (text) => formatWithComma(text),
     },
-    {
+  ];
+
+  if (roles.includes("Sales") || roles.includes("Admin")) {
+    tableColumns.push({
       title: "Action",
       width: 50,
       render: (_, record) => {
@@ -184,8 +204,8 @@ function ViewOrder() {
           </Button>
         );
       },
-    },
-  ];
+    });
+  }
 
   if (order.latest_status.status.id !== 9) {
     tableColumns.pop();
@@ -196,7 +216,7 @@ function ViewOrder() {
   const status_id = latest_status.status.id;
 
   let statusColor = "orange";
-  if (status_id === 11 && status_id === 12) {
+  if (status_id === 11 || status_id === 12) {
     statusColor = "purple";
   } else if (status_id === 8) {
     statusColor = "red";
@@ -204,7 +224,7 @@ function ViewOrder() {
 
   return (
     <>
-      <Row>
+      <Row gutter={[16, 16]}>
         <Col span={16}>
           <Row type="flex" justify="space-between" style={{ marginBottom: 16 }}>
             <Col>
@@ -269,7 +289,16 @@ function ViewOrder() {
             justify="space-between"
             style={{ marginTop: 16, marginBottom: 16 }}
           >
-            <Col></Col>
+            <Col>
+              <div id="barcode">
+                <Barcode
+                  value={order.barcode}
+                  height={50}
+                  displayValue={true}
+                />
+              </div>
+              <Button onClick={handlePrint}>Print Barcode</Button>
+            </Col>
             <Col>
               <Descriptions
                 bordered
@@ -291,18 +320,24 @@ function ViewOrder() {
 
           {order.latest_status.status.id === 9 && (
             <div style={{ textAlign: "right" }}>
-              <Button
-                size="large"
-                type="primary"
-                disabled={hasEmptyAllocation(order)}
-                onClick={handleProcess}
-              >
-                Process
-              </Button>
+              {(roles.includes("Sales") || roles.includes("Admin")) && (
+                <Button
+                  size="large"
+                  type="primary"
+                  disabled={hasEmptyAllocation(order)}
+                  onClick={handleProcess}
+                >
+                  Process
+                </Button>
+              )}
             </div>
           )}
         </Col>
-        <Col></Col>
+        <Col span={8}>
+          <div style={{ width: "100%", paddingLeft: 50, color: "#eb2f96" }}>
+            <OrderTracking orderId={order.id} />
+          </div>
+        </Col>
       </Row>
 
       <Drawer

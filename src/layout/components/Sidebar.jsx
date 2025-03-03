@@ -120,13 +120,11 @@ function Sidebar() {
       "/companies",
       "/locations",
       "/warehouses",
-      "/customerOrders",
     ],
     Customer: ["/ecommerce", "/customerOrders"],
     Sales: ["/dashboard", "/orders"],
     Procurement: ["/dashboard", "/purchaseOrders"],
     "Inventory staff": ["/dashboard", "/inventory"],
-    "Warehouse staff": ["/dashboard", "/purchaseOrders"],
     "Logistic manager": ["/dashboard", "/orders"],
   };
 

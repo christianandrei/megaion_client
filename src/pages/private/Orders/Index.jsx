@@ -24,6 +24,7 @@ import { getColumnSearchProps } from "../../../helpers/TableFilterProps";
 import { formatWithComma } from "../../../helpers/numbers";
 
 import useDataStore from "../../../store/DataStore";
+import useUserStore from "../../../store/UserStore";
 
 const { Text } = Typography;
 
@@ -35,6 +36,7 @@ function Orders() {
 
   const navigate = useNavigate();
   const { statuses } = useDataStore();
+  const { roles } = useUserStore();
   const { modal } = App.useApp();
 
   const getOrders = async () => {
@@ -93,6 +95,10 @@ function Orders() {
         record?.user?.company_members[0]?.company.name || "-",
     },
     {
+      title: "",
+      ...getColumnSearchProps("barcode", "Scan Barcode"),
+    },
+    {
       title: "Order date",
       dataIndex: "created_at",
       render: (text) => {
@@ -116,6 +122,7 @@ function Orders() {
       title: "Status",
       dataIndex: "status_id",
       width: 100,
+
       render: (_, record) => {
         const status_id = record.latest_status.status.id;
 
@@ -143,13 +150,17 @@ function Orders() {
         const status_id = record.latest_status.status.id;
 
         if (status_id === 10) {
-          menuItems.unshift({ key: 11, label: statuses[11] });
+          if (roles.includes("Logistic manager") || roles.includes("Admin")) {
+            menuItems.unshift({ key: 11, label: statuses[11] });
+          }
           menuItems.pop();
           menuItems.pop();
         }
 
         if (status_id === 11) {
-          menuItems.unshift({ key: 12, label: statuses[12] });
+          if (roles.includes("Logistic manager")) {
+            menuItems.unshift({ key: 12, label: statuses[12] });
+          }
           menuItems.pop();
           menuItems.pop();
         }
@@ -257,7 +268,41 @@ function Orders() {
       key: "6",
       label: "All Orders",
       children: (
-        <Table columns={tableColumns} dataSource={orders} rowKey="id" />
+        <Table
+          columns={tableColumns.map((cols) =>
+            cols.dataIndex === "status_id"
+              ? {
+                  ...cols,
+                  filters: [
+                    {
+                      text: "On Hold",
+                      value: 9,
+                    },
+                    {
+                      text: "Processing",
+                      value: 10,
+                    },
+                    {
+                      text: "In Transit",
+                      value: 11,
+                    },
+                    {
+                      text: "Delivered",
+                      value: 12,
+                    },
+                    {
+                      text: "Cancelled",
+                      value: 8,
+                    },
+                  ],
+                  onFilter: (value, record) =>
+                    record.latest_status.status.id === value,
+                }
+              : cols
+          )}
+          dataSource={orders}
+          rowKey="id"
+        />
       ),
     },
   ];
